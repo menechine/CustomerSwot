@@ -183,6 +183,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .footer{margin-top:18px;text-align:center;font-size:clamp(10px,2.8vw,11px);color:#6b7080;display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;padding:0 4px;}
 @media(min-width:520px){.tabs{grid-template-columns:repeat(4,1fr);}body{padding:24px 20px 60px;}}
 
+
+/* ── ADD ITEM BUTTON & FORM ── */
+.add-item-btn{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;padding:10px 14px;border-radius:10px;border:1.5px dashed #ffffff20;background:transparent;color:#8a8fa8;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;-webkit-tap-highlight-color:transparent;text-align:left;}
+.add-item-btn:hover,.add-item-btn:active{border-color:#ffffff40;background:#ffffff08;color:#c8ccd8;}
+.add-item-btn .aib-icon{font-size:18px;flex-shrink:0;}
+
+.new-item-form{display:none;margin-top:8px;background:#1a1d27;border:.5px solid #ffffff20;border-radius:12px;padding:16px;animation:slideIn .18s ease;}
+.new-item-form.open{display:block;}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+.nif-label{font-size:10px;font-weight:700;color:#6b7080;letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;display:block;}
+.nif-input{width:100%;background:#ffffff08;border:.5px solid #ffffff20;border-radius:7px;padding:9px 11px;font-size:13px;color:#e8eaf0;outline:none;font-family:inherit;transition:border-color .15s;margin-bottom:10px;}
+.nif-input:focus{border-color:#ffffff45;}
+.nif-input::placeholder{color:#4b5060;}
+textarea.nif-input{resize:none;min-height:64px;line-height:1.5;}
+
+.nif-badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.nif-badge-opt{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1.5px solid transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s;}
+.nif-badge-opt.sel-key{background:#1D9E75;color:#fff;border-color:#1D9E75;}
+.nif-badge-opt.sel-high{background:#E24B4A;color:#fff;border-color:#E24B4A;}
+.nif-badge-opt.sel-med{background:#EF9F27;color:#fff;border-color:#EF9F27;}
+.nif-badge-opt.sel-none{background:#ffffff15;color:#c8ccd8;border-color:#ffffff30;}
+.nif-badge-opt:not(.sel-key):not(.sel-high):not(.sel-med):not(.sel-none){background:#ffffff08;color:#8a8fa8;border-color:#ffffff20;}
+
+.nif-actions{display:flex;gap:8px;justify-content:flex-end;}
+.nif-cancel{font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;background:transparent;border:.5px solid #ffffff25;color:#8a8fa8;cursor:pointer;}
+.nif-save{font-size:12px;font-weight:700;padding:7px 16px;border-radius:8px;background:#1D9E75;color:#fff;border:none;cursor:pointer;transition:opacity .15s;}
+.nif-save:active{opacity:.8;}
+
+/* custom item card extras */
+.custom-item-del{position:absolute;top:10px;right:36px;font-size:11px;color:#6b7080;cursor:pointer;padding:2px 4px;transition:color .15s;}
+.custom-item-del:hover{color:#F09595;}
+.item-card{position:relative;}
+.custom-tag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;background:#7C3AED25;color:#C4B5FD;margin-left:4px;text-transform:uppercase;letter-spacing:.04em;}
+
 </style>
 </head>
 <body>
@@ -237,6 +272,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 </div></div>
 </div>
 </div>
+<div id="ci-container-chassis-s"></div>
+<button class="add-item-btn" onclick="event.stopPropagation();openNIF('chassis','s')"><span class="aib-icon">&#43;</span> Adicionar nova força</button>
+<div class="new-item-form" id="nif-chassis-s">
+  <label class="nif-label">T&#237;tulo</label>
+  <input id="nif-chassis-s-title" class="nif-input" placeholder="Ex: Parceria com engenharia de produto..." onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('nif-chassis-s-desc').focus();}">
+  <label class="nif-label">Descri&#231;&#227;o <span style="color:#4b5060;font-size:9px">(opcional)</span></label>
+  <textarea id="nif-chassis-s-desc" class="nif-input" placeholder="Contexto e detalhes..."></textarea>
+  <label class="nif-label">Classifica&#231;&#227;o</label>
+  <div class="nif-badge-row">
+    <span class="nif-badge-opt" data-val="key" onclick="selectBadge('nif-chassis-s','key')">&#11044; Chave</span>
+    <span class="nif-badge-opt" data-val="high" onclick="selectBadge('nif-chassis-s','high')">&#11044; Cr&#237;tico</span>
+    <span class="nif-badge-opt" data-val="med" onclick="selectBadge('nif-chassis-s','med')">&#11044; Aten&#231;&#227;o</span>
+    <span class="nif-badge-opt sel-none" data-val="none" onclick="selectBadge('nif-chassis-s','none')">Sem classifica&#231;&#227;o</span>
+  </div>
+  <div class="nif-actions">
+    <button class="nif-cancel" onclick="closeNIF('chassis','s')">Cancelar</button>
+    <button class="nif-save" onclick="saveNewItem('chassis','s')">&#128190; Salvar</button>
+  </div>
+</div>
 <div class="panel panel-w " id="panel-chassis-w"><div class="panel-label">Fraquezas — Weaknesses</div><div class="grp"><div class="grp-title">Portfólio</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Ausência de ferramenta simples para operações básicas do chassis <span class="badge b-high">crítico</span></div><div class="item-desc">Operações de menor criticidade ainda usam concorrente por custo.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-melhorar" data-aid="c-w1a1"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Mapear operações básicas do chassis sem cobertura AC</div>Listar processos onde concorrente está instalado por custo — em 30 dias.</div></div></div>
 <div class="action act-melhorar" data-aid="c-w1a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Avaliar bundle de entrada para operações de baixa criticidade</div>Propor pacote econômico ou parceria para fechar o gap — em 60 dias.</div></div></div>
 </div></div>
@@ -245,6 +299,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 <div class="action act-melhorar" data-aid="c-w2a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Criar protocolo de comunicação proativa ao cliente em caso de risco de prazo</div>Aviso mínimo 24h antes com plano alternativo — formalizar agora.</div></div></div>
 </div></div>
 </div>
+</div>
+<div id="ci-container-chassis-w"></div>
+<button class="add-item-btn" onclick="event.stopPropagation();openNIF('chassis','w')"><span class="aib-icon">&#43;</span> Adicionar nova fraqueza</button>
+<div class="new-item-form" id="nif-chassis-w">
+  <label class="nif-label">T&#237;tulo</label>
+  <input id="nif-chassis-w-title" class="nif-input" placeholder="Ex: Parceria com engenharia de produto..." onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('nif-chassis-w-desc').focus();}">
+  <label class="nif-label">Descri&#231;&#227;o <span style="color:#4b5060;font-size:9px">(opcional)</span></label>
+  <textarea id="nif-chassis-w-desc" class="nif-input" placeholder="Contexto e detalhes..."></textarea>
+  <label class="nif-label">Classifica&#231;&#227;o</label>
+  <div class="nif-badge-row">
+    <span class="nif-badge-opt" data-val="key" onclick="selectBadge('nif-chassis-w','key')">&#11044; Chave</span>
+    <span class="nif-badge-opt" data-val="high" onclick="selectBadge('nif-chassis-w','high')">&#11044; Cr&#237;tico</span>
+    <span class="nif-badge-opt" data-val="med" onclick="selectBadge('nif-chassis-w','med')">&#11044; Aten&#231;&#227;o</span>
+    <span class="nif-badge-opt sel-none" data-val="none" onclick="selectBadge('nif-chassis-w','none')">Sem classifica&#231;&#227;o</span>
+  </div>
+  <div class="nif-actions">
+    <button class="nif-cancel" onclick="closeNIF('chassis','w')">Cancelar</button>
+    <button class="nif-save" onclick="saveNewItem('chassis','w')">&#128190; Salvar</button>
+  </div>
 </div>
 <div class="panel panel-o " id="panel-chassis-o"><div class="panel-label">Oportunidades — Opportunities</div><div class="grp"><div class="grp-title">Crescimento</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Novos modelos de chassis elétrico e híbrido Scania <span class="badge b-key">prioritário</span></div><div class="item-desc">Eletrificação exige novos pontos de fixação e novos processos — janela de especificação.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-aproveitar" data-aid="c-o1a1"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Identificar projetos de chassis EV em fase de especificação</div>Mapear com a engenharia os novos modelos em desenvolvimento — próxima visita.</div></div></div>
 <div class="action act-aproveitar" data-aid="c-o1a2"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Apresentar proposta de solução integrada para chassis EV</div>Proposta SW+HW+Service para os novos pontos de fixação da bateria — em 60 dias.</div></div></div>
@@ -255,6 +328,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 </div></div>
 </div>
 </div>
+<div id="ci-container-chassis-o"></div>
+<button class="add-item-btn" onclick="event.stopPropagation();openNIF('chassis','o')"><span class="aib-icon">&#43;</span> Adicionar nova oportunidade</button>
+<div class="new-item-form" id="nif-chassis-o">
+  <label class="nif-label">T&#237;tulo</label>
+  <input id="nif-chassis-o-title" class="nif-input" placeholder="Ex: Parceria com engenharia de produto..." onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('nif-chassis-o-desc').focus();}">
+  <label class="nif-label">Descri&#231;&#227;o <span style="color:#4b5060;font-size:9px">(opcional)</span></label>
+  <textarea id="nif-chassis-o-desc" class="nif-input" placeholder="Contexto e detalhes..."></textarea>
+  <label class="nif-label">Classifica&#231;&#227;o</label>
+  <div class="nif-badge-row">
+    <span class="nif-badge-opt" data-val="key" onclick="selectBadge('nif-chassis-o','key')">&#11044; Chave</span>
+    <span class="nif-badge-opt" data-val="high" onclick="selectBadge('nif-chassis-o','high')">&#11044; Cr&#237;tico</span>
+    <span class="nif-badge-opt" data-val="med" onclick="selectBadge('nif-chassis-o','med')">&#11044; Aten&#231;&#227;o</span>
+    <span class="nif-badge-opt sel-none" data-val="none" onclick="selectBadge('nif-chassis-o','none')">Sem classifica&#231;&#227;o</span>
+  </div>
+  <div class="nif-actions">
+    <button class="nif-cancel" onclick="closeNIF('chassis','o')">Cancelar</button>
+    <button class="nif-save" onclick="saveNewItem('chassis','o')">&#128190; Salvar</button>
+  </div>
+</div>
 <div class="panel panel-t " id="panel-chassis-t"><div class="panel-label">Amea&#231;as — Threats</div><div class="grp"><div class="grp-title">Competição</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Concorrentes com preço menor para fixações não estruturais do chassis <span class="badge b-high">crítico</span></div><div class="item-desc">Processos de menor criticidade são vulneráveis à entrada por preço.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-mitigar" data-aid="c-t1a1"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Criar argumento de TCO para fixações não estruturais do chassis</div>Planilha comparando custo total AC vs concorrente — disponível em 30 dias.</div></div></div>
 <div class="action act-mitigar" data-aid="c-t1a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Aprofundar relacionamento com engenharia para blindar especificações</div>Garantir que AC esteja na especificação técnica de todo processo — ação contínua.</div></div></div>
 </div></div>
@@ -263,6 +355,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 <div class="action act-mitigar" data-aid="c-t2a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Escalar risco à liderança AC para ação em nível de Grupo VW</div>Relatório de risco com dados do chassis — entregar à diretoria em 30 dias.</div></div></div>
 </div></div>
 </div>
+</div>
+<div id="ci-container-chassis-t"></div>
+<button class="add-item-btn" onclick="event.stopPropagation();openNIF('chassis','t')"><span class="aib-icon">&#43;</span> Adicionar nova ameaça</button>
+<div class="new-item-form" id="nif-chassis-t">
+  <label class="nif-label">T&#237;tulo</label>
+  <input id="nif-chassis-t-title" class="nif-input" placeholder="Ex: Parceria com engenharia de produto..." onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('nif-chassis-t-desc').focus();}">
+  <label class="nif-label">Descri&#231;&#227;o <span style="color:#4b5060;font-size:9px">(opcional)</span></label>
+  <textarea id="nif-chassis-t-desc" class="nif-input" placeholder="Contexto e detalhes..."></textarea>
+  <label class="nif-label">Classifica&#231;&#227;o</label>
+  <div class="nif-badge-row">
+    <span class="nif-badge-opt" data-val="key" onclick="selectBadge('nif-chassis-t','key')">&#11044; Chave</span>
+    <span class="nif-badge-opt" data-val="high" onclick="selectBadge('nif-chassis-t','high')">&#11044; Cr&#237;tico</span>
+    <span class="nif-badge-opt" data-val="med" onclick="selectBadge('nif-chassis-t','med')">&#11044; Aten&#231;&#227;o</span>
+    <span class="nif-badge-opt sel-none" data-val="none" onclick="selectBadge('nif-chassis-t','none')">Sem classifica&#231;&#227;o</span>
+  </div>
+  <div class="nif-actions">
+    <button class="nif-cancel" onclick="closeNIF('chassis','t')">Cancelar</button>
+    <button class="nif-save" onclick="saveNewItem('chassis','t')">&#128190; Salvar</button>
+  </div>
 </div>
 <div class="footer"><span class="badge b-high">cr&#237;tico</span> <span class="badge b-med">aten&#231;&#227;o</span> <span class="badge b-key">chave</span></div>
 </div>
@@ -707,6 +818,99 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
 <script>
 
+// ── Custom SWOT Items ─────────────────────────────────────────────────────────
+var _nifState = {}; // {formId: {badge:'key'}}
+
+function loadCustom(factory, q){ try{return JSON.parse(localStorage.getItem('ci_'+factory+'_'+q))||[];}catch(e){return[];} }
+function saveCustom(factory, q, items){ localStorage.setItem('ci_'+factory+'_'+q, JSON.stringify(items)); }
+
+function openNIF(factory, q) {
+  var fid = 'nif-'+factory+'-'+q;
+  var f = document.getElementById(fid);
+  if(!f) return;
+  f.classList.toggle('open');
+  if(f.classList.contains('open')){
+    _nifState[fid] = {badge:'none'};
+    selectBadge(fid,'none');
+    setTimeout(function(){ var inp=document.getElementById(fid+'-title'); if(inp)inp.focus(); },60);
+  }
+}
+
+function closeNIF(factory, q) {
+  var f = document.getElementById('nif-'+factory+'-'+q);
+  if(f){ f.classList.remove('open'); clearNIF(factory,q); }
+}
+
+function clearNIF(factory, q){
+  var fid='nif-'+factory+'-'+q;
+  var t=document.getElementById(fid+'-title'); if(t)t.value='';
+  var d=document.getElementById(fid+'-desc');  if(d)d.value='';
+}
+
+function selectBadge(fid, val){
+  _nifState[fid] = _nifState[fid]||{};
+  _nifState[fid].badge = val;
+  var opts = document.querySelectorAll('#'+fid+' .nif-badge-opt');
+  opts.forEach(function(o){
+    o.classList.remove('sel-key','sel-high','sel-med','sel-none');
+    if(o.dataset.val===val) o.classList.add('sel-'+val);
+  });
+}
+
+function saveNewItem(factory, q) {
+  var fid='nif-'+factory+'-'+q;
+  var title=document.getElementById(fid+'-title').value.trim();
+  var desc =document.getElementById(fid+'-desc').value.trim();
+  if(!title){document.getElementById(fid+'-title').focus();return;}
+  var badge=(_nifState[fid]||{}).badge||'none';
+  var items=loadCustom(factory,q);
+  var id='ci-'+factory+'-'+q+'-'+Date.now().toString(36);
+  items.push({id:id,title:title,desc:desc,badge:badge,at:Date.now()});
+  saveCustom(factory,q,items);
+  closeNIF(factory,q);
+  renderCustomItems(factory,q);
+}
+
+function deleteCustomItem(factory, q, itemId){
+  if(!confirm('Remover este item?')) return;
+  var items=loadCustom(factory,q).filter(function(x){return x.id!==itemId;});
+  saveCustom(factory,q,items);
+  renderCustomItems(factory,q);
+}
+
+function renderCustomItems(factory, q){
+  var container=document.getElementById('ci-container-'+factory+'-'+q);
+  if(!container) return;
+  var items=loadCustom(factory,q);
+  if(!items.length){container.innerHTML='';return;}
+  var BADGE_CLS={key:'b-key',high:'b-high',med:'b-med',none:''};
+  var BADGE_LBL={key:'chave',high:'crítico',med:'atenção',none:''};
+  var PANEL_CLS={s:'panel-s',w:'panel-w',o:'panel-o',t:'panel-t'};
+  container.innerHTML = items.map(function(item){
+    var bc=BADGE_CLS[item.badge]||'';
+    var bl=BADGE_LBL[item.badge]||'';
+    var badgeHtml=bc?('<span class="badge '+bc+'">'+bl+'</span>'):'';
+    return '<div class="item-card '+PANEL_CLS[q]+'" style="position:relative" onclick="toggle(this)">'
+      +'<span class="custom-item-del" onclick="event.stopPropagation();deleteCustomItem(''+factory+'',''+q+'',''+item.id+'')" title="Remover">&#128465;</span>'
+      +'<div class="item-header"><div class="item-left">'
+      +'<div class="item-title">'+esc(item.title)+' <span class="custom-tag">Personalizado</span> '+badgeHtml+'</div>'
+      +(item.desc?'<div class="item-desc">'+esc(item.desc)+'</div>':'')
+      +'</div><div class="chevron">&#9660;</div></div>'
+      +'<div class="smart-area" onclick="event.stopPropagation()">'
+      +'<div class="smart-title">&#9889; Ações SMART · <em style="color:#8a8fa8;font-style:normal;font-size:10px">Adicione tarefas e notas abaixo</em></div>'
+      +'<div class="action act-manter" data-aid="'+item.id+'"><div class="action-top"><div class="act-pill">Planejar</div><div class="act-body"><div class="act-what">Defina suas ações SMART para este item</div>Use as tarefas e notas abaixo para registrar o que precisa ser feito.</div></div></div>'
+      +'</div></div>';
+  }).join('');
+  // init extras for new items
+  container.querySelectorAll('.action[data-aid]').forEach(function(el){
+    if(!el.querySelector('.action-extras')) renderExtras(el.dataset.aid);
+  });
+}
+
+function initCustomItems(factory) {
+  ['s','w','o','t'].forEach(function(q){ renderCustomItems(factory,q); });
+}
+
 function switchFac(prefix, q) {
   ['s','w','o','t'].forEach(function(x) {
     var p = document.getElementById('panel-' + prefix + '-' + x);
@@ -727,6 +931,7 @@ function go(id) {
   PAGES.forEach(function(p){ document.getElementById('pg-'+p).classList.remove('on'); });
   document.getElementById('pg-'+id).classList.add('on');
   window.scrollTo(0,0);
+  if(id === 'chassis') { initCustomItems('chassis'); }
   if(id === 'swot' && !swotInited) {
     swotInited = true;
     document.querySelectorAll('.action[data-aid]').forEach(function(el){ renderExtras(el.dataset.aid); });
@@ -951,7 +1156,42 @@ function exportPDF(){
   });
   var win = window.open('','_blank');
   if(!win){alert('Permita pop-ups para exportar o PDF.');return;}
-  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>SWOT Atlas Copco x Scania</title><style>body{font-family:Arial,sans-serif;margin:20px;color:#000;font-size:12px;}h1{font-size:15px;margin-bottom:4px;}p{font-size:11px;color:#555;margin-bottom:14px;}table{width:100%;border-collapse:collapse;}th{text-align:left;padding:5px 8px;border-bottom:2px solid #000;font-size:10px;text-transform:uppercase;letter-spacing:.05em;}@media print{@page{margin:10mm;size:A4 portrait;}button{display:none!important;}}</style></head><body><h1>SWOT + A&ccedil;&otilde;es SMART &mdash; Atlas Copco &times; Scania Brasil</h1><p>Key Account &middot; Chassis &middot; Transmiss&otilde;es &middot; Motores &middot; Cabinas &middot; Gerado em ' + new Date().toLocaleDateString('pt-BR') + '</p><button onclick="window.print()" style="margin-bottom:14px;padding:8px 18px;background:#000;color:#fff;border:none;border-radius:5px;font-size:13px;font-weight:700;cursor:pointer">&#128438; Imprimir / Salvar PDF</button><table><thead><tr><th style="width:12%">Tipo</th><th style="width:52%">A&ccedil;&atilde;o SMART</th><th style="width:36%">Tarefas &amp; Notas</th></tr></thead><tbody>' + rows + '</tbody></table></body></html>');
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>SWOT Atlas Copco x Scania</title><style>body{font-family:Arial,sans-serif;margin:20px;color:#000;font-size:12px;}h1{font-size:15px;margin-bottom:4px;}p{font-size:11px;color:#555;margin-bottom:14px;}table{width:100%;border-collapse:collapse;}th{text-align:left;padding:5px 8px;border-bottom:2px solid #000;font-size:10px;text-transform:uppercase;letter-spacing:.05em;}@media print{@page{margin:10mm;size:A4 portrait;}button{display:none!important;}}
+/* ── ADD ITEM BUTTON & FORM ── */
+.add-item-btn{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;padding:10px 14px;border-radius:10px;border:1.5px dashed #ffffff20;background:transparent;color:#8a8fa8;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s;-webkit-tap-highlight-color:transparent;text-align:left;}
+.add-item-btn:hover,.add-item-btn:active{border-color:#ffffff40;background:#ffffff08;color:#c8ccd8;}
+.add-item-btn .aib-icon{font-size:18px;flex-shrink:0;}
+
+.new-item-form{display:none;margin-top:8px;background:#1a1d27;border:.5px solid #ffffff20;border-radius:12px;padding:16px;animation:slideIn .18s ease;}
+.new-item-form.open{display:block;}
+@keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+.nif-label{font-size:10px;font-weight:700;color:#6b7080;letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;display:block;}
+.nif-input{width:100%;background:#ffffff08;border:.5px solid #ffffff20;border-radius:7px;padding:9px 11px;font-size:13px;color:#e8eaf0;outline:none;font-family:inherit;transition:border-color .15s;margin-bottom:10px;}
+.nif-input:focus{border-color:#ffffff45;}
+.nif-input::placeholder{color:#4b5060;}
+textarea.nif-input{resize:none;min-height:64px;line-height:1.5;}
+
+.nif-badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.nif-badge-opt{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1.5px solid transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s;}
+.nif-badge-opt.sel-key{background:#1D9E75;color:#fff;border-color:#1D9E75;}
+.nif-badge-opt.sel-high{background:#E24B4A;color:#fff;border-color:#E24B4A;}
+.nif-badge-opt.sel-med{background:#EF9F27;color:#fff;border-color:#EF9F27;}
+.nif-badge-opt.sel-none{background:#ffffff15;color:#c8ccd8;border-color:#ffffff30;}
+.nif-badge-opt:not(.sel-key):not(.sel-high):not(.sel-med):not(.sel-none){background:#ffffff08;color:#8a8fa8;border-color:#ffffff20;}
+
+.nif-actions{display:flex;gap:8px;justify-content:flex-end;}
+.nif-cancel{font-size:12px;font-weight:600;padding:7px 14px;border-radius:8px;background:transparent;border:.5px solid #ffffff25;color:#8a8fa8;cursor:pointer;}
+.nif-save{font-size:12px;font-weight:700;padding:7px 16px;border-radius:8px;background:#1D9E75;color:#fff;border:none;cursor:pointer;transition:opacity .15s;}
+.nif-save:active{opacity:.8;}
+
+/* custom item card extras */
+.custom-item-del{position:absolute;top:10px;right:36px;font-size:11px;color:#6b7080;cursor:pointer;padding:2px 4px;transition:color .15s;}
+.custom-item-del:hover{color:#F09595;}
+.item-card{position:relative;}
+.custom-tag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;background:#7C3AED25;color:#C4B5FD;margin-left:4px;text-transform:uppercase;letter-spacing:.04em;}
+
+</style></head><body><h1>SWOT + A&ccedil;&otilde;es SMART &mdash; Atlas Copco &times; Scania Brasil</h1><p>Key Account &middot; Chassis &middot; Transmiss&otilde;es &middot; Motores &middot; Cabinas &middot; Gerado em ' + new Date().toLocaleDateString('pt-BR') + '</p><button onclick="window.print()" style="margin-bottom:14px;padding:8px 18px;background:#000;color:#fff;border:none;border-radius:5px;font-size:13px;font-weight:700;cursor:pointer">&#128438; Imprimir / Salvar PDF</button><table><thead><tr><th style="width:12%">Tipo</th><th style="width:52%">A&ccedil;&atilde;o SMART</th><th style="width:36%">Tarefas &amp; Notas</th></tr></thead><tbody>' + rows + '</tbody></table></body></html>');
   win.document.close();
 }
 
