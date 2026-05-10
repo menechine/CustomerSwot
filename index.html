@@ -8,142 +8,43 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" crossorigin="anonymous"></script>
 <style>
-/* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;-webkit-text-size-adjust:100%;}
-.page{display:none;min-height:100vh;}
-.page.active{display:block;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;-webkit-text-size-adjust:100%;}
 
-/* ── MAIN PAGE ── */
-.main-page{padding:28px 16px 48px;}
-.main-header{text-align:center;margin-bottom:32px;}
-.main-logo{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
-.main-logo-dot{width:10px;height:10px;border-radius:50%;background:#1D9E75;}
-.main-brand{font-size:13px;font-weight:700;color:#8a8fa8;letter-spacing:.08em;text-transform:uppercase;}
-.main-title{font-size:clamp(20px,5vw,28px);font-weight:800;color:#f0f2f8;line-height:1.2;margin-bottom:8px;}
-.main-title span{color:#1D9E75;}
-.main-subtitle{font-size:clamp(12px,3vw,14px);color:#6b7080;line-height:1.5;}
-.factory-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:700px;margin:0 auto;}
-.factory-card{border-radius:16px;border:.5px solid;cursor:pointer;overflow:hidden;transition:transform .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent;user-select:none;}
-.factory-card:active{transform:scale(.97);}
-.factory-card.full-width{grid-column:1/-1;}
-.fc-top{height:5px;width:100%;}
-.fc-body{padding:18px 16px 16px;}
-.fc-svg-wrap{width:100%;height:90px;margin-bottom:12px;}
-.fc-name{font-size:clamp(13px,3.5vw,16px);font-weight:800;color:#f0f2f8;letter-spacing:.02em;margin-bottom:4px;}
-.fc-desc{font-size:clamp(10px,2.5vw,11px);color:#8a8fa8;line-height:1.4;}
-.fc-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:8px;text-transform:uppercase;letter-spacing:.05em;}
-.fc-chassis{background:#04221A;border-color:#1D9E7540;}
-.fc-chassis .fc-top{background:linear-gradient(90deg,#1D9E75,#0d6b4f);}
-.fc-chassis .fc-badge{background:#1D9E7525;color:#9FE1CB;}
-.fc-cab{background:#03192E;border-color:#378ADD40;}
-.fc-cab .fc-top{background:linear-gradient(90deg,#378ADD,#1a5f9e);}
-.fc-cab .fc-badge{background:#378ADD25;color:#B5D4F4;}
-.fc-transmission{background:#231A04;border-color:#EF9F2740;}
-.fc-transmission .fc-top{background:linear-gradient(90deg,#EF9F27,#b57219);}
-.fc-transmission .fc-badge{background:#EF9F2725;color:#FAC775;}
-.fc-engine{background:#220808;border-color:#E24B4A40;}
-.fc-engine .fc-top{background:linear-gradient(90deg,#E24B4A,#a02e2d);}
-.fc-engine .fc-badge{background:#E24B4A25;color:#FCA5A5;}
-.fc-swot{background:#160A2A;border-color:#7C3AED40;}
-.fc-swot .fc-top{background:linear-gradient(90deg,#7C3AED,#5B21B6);}
-.fc-swot .fc-badge{background:#7C3AED25;color:#C4B5FD;}
-@media(min-width:520px){
-  .main-page{padding:36px 24px 60px;}
-  .factory-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px #00000055;}
-}
-@media(max-width:380px){.fc-svg-wrap{height:70px;}}
-
-/* ── SUB PAGES ── */
-.sub-page-wrap{padding:0 0 60px;}
-.sub-topbar{position:sticky;top:0;z-index:100;background:#0f1117;border-bottom:.5px solid #ffffff15;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.btn-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#8a8fa8;background:transparent;border:.5px solid #ffffff20;padding:6px 12px;border-radius:8px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.btn-back:active{opacity:.7;}
-.sub-topbar-title{font-size:12px;font-weight:700;color:#8a8fa8;flex:1;text-align:center;}
-.btn-export-top{font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;background:#1D9E75;color:#fff;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-.btn-export-top:active{opacity:.75;}
-.coming-soon{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:32px 20px;text-align:center;}
-.cs-icon{width:120px;height:90px;margin-bottom:24px;}
-.cs-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px;display:inline-block;}
-.cs-title{font-size:22px;font-weight:800;color:#f0f2f8;margin-bottom:8px;}
-.cs-desc{font-size:13px;color:#6b7080;line-height:1.6;max-width:280px;}
-.sub-page-wrap .export-topbar{display:none;}
-
-/* ── RESET & BASE ── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;-webkit-text-size-adjust:100%;}
-
-/* ── PAGE SYSTEM ── */
-.page{display:none;min-height:100vh;}
-.page.active{display:block;}
-
-/* ════════════════════════════════════════
-   MAIN PAGE
-════════════════════════════════════════ */
-.main-page{padding:28px 16px 48px;}
-.main-header{text-align:center;margin-bottom:32px;}
-.main-logo{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;}
-.main-logo-dot{width:10px;height:10px;border-radius:50%;background:#1D9E75;}
-.main-brand{font-size:13px;font-weight:700;color:#8a8fa8;letter-spacing:.08em;text-transform:uppercase;}
-.main-title{font-size:clamp(20px,5vw,28px);font-weight:800;color:#f0f2f8;line-height:1.2;margin-bottom:8px;}
-.main-title span{color:#1D9E75;}
-.main-subtitle{font-size:clamp(12px,3vw,14px);color:#6b7080;line-height:1.5;}
-
-/* factory grid */
-.factory-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:700px;margin:0 auto;}
-.factory-card{border-radius:16px;border:.5px solid;cursor:pointer;overflow:hidden;transition:transform .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent;user-select:none;}
-.factory-card:active{transform:scale(.97);}
-.factory-card.full-width{grid-column:1/-1;}
-.fc-top{height:5px;width:100%;}
-.fc-body{padding:18px 16px 16px;}
-.fc-svg-wrap{width:100%;height:90px;margin-bottom:12px;opacity:.85;}
-.fc-name{font-size:clamp(13px,3.5vw,15px);font-weight:800;color:#f0f2f8;letter-spacing:.02em;margin-bottom:4px;}
-.fc-desc{font-size:clamp(10px,2.5vw,11px);color:#8a8fa8;line-height:1.4;}
-.fc-badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:8px;text-transform:uppercase;letter-spacing:.05em;}
-
-/* individual card colors */
-.fc-chassis{background:#04221A;border-color:#1D9E7540;}
-.fc-chassis .fc-top{background:linear-gradient(90deg,#1D9E75,#0d6b4f);}
-.fc-chassis .fc-badge{background:#1D9E7525;color:#9FE1CB;}
-.fc-cab{background:#03192E;border-color:#378ADD40;}
-.fc-cab .fc-top{background:linear-gradient(90deg,#378ADD,#1a5f9e);}
-.fc-cab .fc-badge{background:#378ADD25;color:#B5D4F4;}
-.fc-transmission{background:#231A04;border-color:#EF9F2740;}
-.fc-transmission .fc-top{background:linear-gradient(90deg,#EF9F27,#b57219);}
-.fc-transmission .fc-badge{background:#EF9F2725;color:#FAC775;}
-.fc-engine{background:#220808;border-color:#E24B4A40;}
-.fc-engine .fc-top{background:linear-gradient(90deg,#E24B4A,#a02e2d);}
-.fc-engine .fc-badge{background:#E24B4A25;color:#FCA5A5;}
-.fc-swot{background:#160A2A;border-color:#7C3AED40;}
-.fc-swot .fc-top{background:linear-gradient(90deg,#7C3AED,#5B21B6);}
-.fc-swot .fc-badge{background:#7C3AED25;color:#C4B5FD;}
-
-@media(min-width:520px){
-  .main-page{padding:36px 24px 60px;}
-  .factory-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px #00000055;}
-}
-@media(max-width:380px){
-  .fc-svg-wrap{height:70px;}
-}
-
-/* ════════════════════════════════════════
-   FACTORY / SUB PAGES
-════════════════════════════════════════ */
-.sub-page-wrap{padding:0 0 60px;}
-.sub-topbar{position:sticky;top:0;z-index:100;background:#0f1117;border-bottom:.5px solid #ffffff15;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.btn-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#8a8fa8;background:transparent;border:.5px solid #ffffff20;padding:6px 12px;border-radius:8px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .15s;}
-.btn-back:active{opacity:.7;}
-.sub-topbar-title{font-size:12px;font-weight:700;color:#8a8fa8;}
-.btn-export-top{font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;background:#1D9E75;color:#fff;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .15s;}
-.btn-export-top:active{opacity:.75;}
-
-/* coming soon */
-.coming-soon{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:32px 20px;text-align:center;}
-.cs-icon{width:100px;height:80px;margin-bottom:24px;opacity:.6;}
-.cs-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px;display:inline-block;}
-.cs-title{font-size:22px;font-weight:800;color:#f0f2f8;margin-bottom:8px;}
-.cs-desc{font-size:13px;color:#6b7080;line-height:1.6;max-width:280px;}
-
+.pg{display:none;min-height:100vh;}
+.pg.on{display:block;}
+.home-wrap{padding:26px 14px 48px;}
+.home-hd{text-align:center;margin-bottom:28px;}
+.ac-badge{display:inline-flex;align-items:center;gap:7px;margin-bottom:12px;}
+.ac-dot{width:9px;height:9px;border-radius:50%;background:#1D9E75;}
+.ac-lbl{font-size:12px;font-weight:700;color:#6b7080;letter-spacing:.09em;text-transform:uppercase;}
+.home-title{font-size:clamp(22px,6vw,30px);font-weight:800;color:#f0f2f8;margin-bottom:6px;line-height:1.2;}
+.home-title em{color:#1D9E75;font-style:normal;}
+.home-sub{font-size:13px;color:#6b7080;}
+.fc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;margin:0 auto;}
+.fc{border-radius:14px;border:.5px solid;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s;}
+.fc:active{transform:scale(.96);}
+.fc-wide{grid-column:1/-1;}
+.fc-bar{height:5px;}
+.fc-inner{padding:15px 13px 14px;}
+.fc-icon{width:100%;height:82px;margin-bottom:10px;}
+.fc-name{font-size:clamp(14px,3.8vw,16px);font-weight:800;color:#f0f2f8;margin-bottom:3px;}
+.fc-desc{font-size:clamp(10px,2.6vw,11px);color:#8a8fa8;line-height:1.4;margin-bottom:7px;}
+.fc-tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;border:.5px solid;letter-spacing:.05em;text-transform:uppercase;}
+.fc-wide .fc-inner{display:flex;align-items:center;gap:16px;}
+.fc-wide .fc-icon{min-width:110px;width:110px;height:78px;margin-bottom:0;}
+@media(min-width:520px){.home-wrap{padding:36px 24px 60px;}.fc:hover{transform:translateY(-3px);box-shadow:0 8px 28px #00000055;}}
+@media(max-width:360px){.fc-icon{height:66px;}}
+.uc-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;padding:32px 20px;text-align:center;}
+.uc-icon{width:130px;height:100px;margin-bottom:22px;}
+.uc-tag{font-size:10px;font-weight:800;padding:3px 11px;border-radius:20px;border:.5px solid;letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px;display:inline-block;}
+.uc-title{font-size:26px;font-weight:800;color:#f0f2f8;margin-bottom:8px;}
+.uc-line{width:36px;height:3px;border-radius:2px;margin:12px auto 14px;}
+.uc-txt{font-size:13px;color:#6b7080;line-height:1.65;max-width:280px;}
+.topbar{position:sticky;top:0;z-index:100;background:#0f1117;border-bottom:.5px solid #ffffff15;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.btn-back{font-size:13px;font-weight:700;padding:6px 13px;border-radius:8px;border:.5px solid;cursor:pointer;background:transparent;-webkit-tap-highlight-color:transparent;}
+.tb-title{font-size:12px;font-weight:700;color:#6b7080;flex:1;text-align:center;}
+.btn-exp{font-size:12px;font-weight:700;padding:7px 14px;border-radius:8px;background:#1D9E75;color:#fff;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent;}
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:#0f1117;color:#e8eaf0;min-height:100vh;padding:20px 14px 60px;-webkit-text-size-adjust:100%;}
@@ -282,301 +183,229 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 .footer{margin-top:18px;text-align:center;font-size:clamp(10px,2.8vw,11px);color:#6b7080;display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;padding:0 4px;}
 @media(min-width:520px){.tabs{grid-template-columns:repeat(4,1fr);}body{padding:24px 20px 60px;}}
 
-
-/* overrides for sub-page */
-.sub-page-wrap .export-topbar{margin:0;padding:10px 14px;border-bottom:.5px solid #ffffff15;}
-@media(min-width:520px){.sub-page-wrap .export-topbar{margin:0;padding:10px 20px;}}
 </style>
 </head>
 <body>
 
-<!-- MAIN PAGE -->
-<div class="page active" id="page-main">
-<div class="main-page">
-  <div class="main-header">
-    <div class="main-logo"><div class="main-logo-dot"></div><span class="main-brand">Atlas Copco</span></div>
-    <h1 class="main-title">Scania <span>Brasil</span></h1>
-    <p class="main-subtitle">Key Account &middot; Gest&atilde;o Estrat&eacute;gica por F&aacute;brica</p>
-  </div>
-  <div class="factory-grid">
+<div class="pg on" id="pg-home">
+<div class="home-wrap">
+<div class="home-hd"><div class="ac-badge"><div class="ac-dot"></div><span class="ac-lbl">Atlas Copco</span></div>
+<h1 class="home-title">Scania <em>Brasil</em></h1>
+<p class="home-sub">Key Account &middot; Gestão Estratégica por Fábrica</p></div>
+<div class="fc-grid">
+<div class="fc" style="background:#04221A;border-color:#1D9E7540" onclick="go('chassis')">
+<div class="fc-bar" style="background:linear-gradient(90deg,#1D9E75,#1D9E7577)"></div>
+<div class="fc-inner"><div class="fc-icon" style="color:#1D9E75"><svg viewBox="0 0 160 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect x="8" y="34" width="144" height="10" rx="3" stroke="currentColor" stroke-width="2.2"/><rect x="8" y="57" width="144" height="10" rx="3" stroke="currentColor" stroke-width="2.2"/><line x1="32" y1="34" x2="32" y2="67" stroke="currentColor" stroke-width="2"/><line x1="60" y1="34" x2="60" y2="67" stroke="currentColor" stroke-width="2"/><line x1="88" y1="34" x2="88" y2="67" stroke="currentColor" stroke-width="2"/><line x1="120" y1="34" x2="120" y2="67" stroke="currentColor" stroke-width="2"/><line x1="20" y1="67" x2="20" y2="80" stroke="currentColor" stroke-width="2.5"/><circle cx="20" cy="88" r="8" stroke="currentColor" stroke-width="2"/><circle cx="20" cy="88" r="3" fill="currentColor" opacity=".4"/><line x1="140" y1="67" x2="140" y2="80" stroke="currentColor" stroke-width="2.5"/><circle cx="140" cy="88" r="8" stroke="currentColor" stroke-width="2"/><circle cx="140" cy="88" r="3" fill="currentColor" opacity=".4"/><line x1="108" y1="67" x2="108" y2="80" stroke="currentColor" stroke-width="2.5"/><circle cx="108" cy="88" r="8" stroke="currentColor" stroke-width="2"/><circle cx="108" cy="88" r="3" fill="currentColor" opacity=".4"/><path d="M8 34 L8 22 Q8 14 18 14 L46 14" stroke="currentColor" stroke-width="1.8" opacity=".7"/><rect x="46" y="7" width="34" height="27" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".7"/></svg></div>
+<div class="fc-name">Chassis</div><div class="fc-desc">Fábrica de Chassis &middot; Montagem estrutural</div>
+<span class="fc-tag" style="background:#1D9E7520;color:#9FE1CB;border-color:#1D9E7540">Under Construction</span></div></div>
+<div class="fc" style="background:#03192E;border-color:#378ADD40" onclick="go('cab')">
+<div class="fc-bar" style="background:linear-gradient(90deg,#378ADD,#378ADD77)"></div>
+<div class="fc-inner"><div class="fc-icon" style="color:#378ADD"><svg viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><path d="M22 82 L22 44 Q22 31 34 28 L62 19 Q73 15 84 19 L126 28 Q138 31 138 44 L138 82 Z" stroke="currentColor" stroke-width="2.2"/><line x1="22" y1="46" x2="138" y2="46" stroke="currentColor" stroke-width="1.5" opacity=".55"/><rect x="30" y="31" width="36" height="24" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".85"/><rect x="76" y="31" width="36" height="24" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".85"/><path d="M22 82 L22 91 Q22 99 30 99 L130 99 Q138 99 138 91 L138 82" stroke="currentColor" stroke-width="2.2"/><circle cx="39" cy="96" r="8" stroke="currentColor" stroke-width="2"/><circle cx="39" cy="96" r="3" fill="currentColor" opacity=".4"/><circle cx="121" cy="96" r="8" stroke="currentColor" stroke-width="2"/><circle cx="121" cy="96" r="3" fill="currentColor" opacity=".4"/><rect x="62" y="70" width="36" height="12" rx="2" stroke="currentColor" stroke-width="1.5" opacity=".7"/><path d="M22 62 L12 62 L12 76 L22 76" stroke="currentColor" stroke-width="1.8" opacity=".6"/><path d="M138 62 L148 62 L148 76 L138 76" stroke="currentColor" stroke-width="1.8" opacity=".6"/></svg></div>
+<div class="fc-name">Cab</div><div class="fc-desc">Fábrica de Cabinas &middot; Montagem e acabamento</div>
+<span class="fc-tag" style="background:#378ADD20;color:#B5D4F4;border-color:#378ADD40">Under Construction</span></div></div>
+<div class="fc" style="background:#231A04;border-color:#EF9F2740" onclick="go('transmission')">
+<div class="fc-bar" style="background:linear-gradient(90deg,#EF9F27,#EF9F2777)"></div>
+<div class="fc-inner"><div class="fc-icon" style="color:#EF9F27"><svg viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect x="32" y="22" width="96" height="66" rx="7" stroke="currentColor" stroke-width="2.2"/><circle cx="65" cy="55" r="20" stroke="currentColor" stroke-width="2"/><circle cx="65" cy="55" r="7" stroke="currentColor" stroke-width="1.8" opacity=".7"/><circle cx="104" cy="55" r="13" stroke="currentColor" stroke-width="2"/><circle cx="104" cy="55" r="4.5" stroke="currentColor" stroke-width="1.8" opacity=".7"/><line x1="4" y1="55" x2="32" y2="55" stroke="currentColor" stroke-width="2.5" opacity=".85"/><rect x="1" y="48" width="9" height="14" rx="2" fill="currentColor" opacity=".2" stroke="currentColor" stroke-width="1.8"/><line x1="128" y1="55" x2="156" y2="55" stroke="currentColor" stroke-width="2.5" opacity=".85"/><rect x="150" y="48" width="9" height="14" rx="2" fill="currentColor" opacity=".2" stroke="currentColor" stroke-width="1.8"/><line x1="65" y1="35" x2="65" y2="28" stroke="currentColor" stroke-width="2.2" opacity=".7"/><line x1="65" y1="75" x2="65" y2="82" stroke="currentColor" stroke-width="2.2" opacity=".7"/><line x1="45" y1="44" x2="40" y2="40" stroke="currentColor" stroke-width="1.8" opacity=".7"/><line x1="45" y1="66" x2="40" y2="70" stroke="currentColor" stroke-width="1.8" opacity=".7"/></svg></div>
+<div class="fc-name">Transmission</div><div class="fc-desc">Fábrica de Transmissões &middot; Caixas e eixos</div>
+<span class="fc-tag" style="background:#EF9F2720;color:#FAC775;border-color:#EF9F2740">Under Construction</span></div></div>
+<div class="fc" style="background:#220808;border-color:#E24B4A40" onclick="go('engine')">
+<div class="fc-bar" style="background:linear-gradient(90deg,#E24B4A,#E24B4A77)"></div>
+<div class="fc-inner"><div class="fc-icon" style="color:#E24B4A"><svg viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect x="24" y="42" width="98" height="46" rx="5" stroke="currentColor" stroke-width="2.2"/><rect x="34" y="22" width="16" height="22" rx="3" stroke="currentColor" stroke-width="2" opacity=".9"/><rect x="58" y="22" width="16" height="22" rx="3" stroke="currentColor" stroke-width="2" opacity=".9"/><rect x="82" y="22" width="16" height="22" rx="3" stroke="currentColor" stroke-width="2" opacity=".9"/><line x1="42" y1="24" x2="42" y2="42" stroke="currentColor" stroke-width="2.2" opacity=".75"/><line x1="66" y1="24" x2="66" y2="42" stroke="currentColor" stroke-width="2.2" opacity=".75"/><line x1="90" y1="24" x2="90" y2="42" stroke="currentColor" stroke-width="2.2" opacity=".75"/><line x1="24" y1="66" x2="122" y2="66" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3" opacity=".4"/><path d="M28 88 Q73 96 118 88" stroke="currentColor" stroke-width="1.8" opacity=".6"/><circle cx="142" cy="52" r="11" stroke="currentColor" stroke-width="2" opacity=".9"/><path d="M131 52 L142 44 L142 60 Z" fill="currentColor" opacity=".5"/><line x1="131" y1="52" x2="122" y2="52" stroke="currentColor" stroke-width="2"/><line x1="142" y1="41" x2="142" y2="27" stroke="currentColor" stroke-width="1.8" stroke-dasharray="3,2" opacity=".55"/><rect x="5" y="48" width="19" height="9" rx="2" stroke="currentColor" stroke-width="1.8" opacity=".75"/><line x1="24" y1="52" x2="5" y2="52" stroke="currentColor" stroke-width="1.8" opacity=".55"/></svg></div>
+<div class="fc-name">Engine</div><div class="fc-desc">Fábrica de Motores &middot; Bloco, cabeçote e testes</div>
+<span class="fc-tag" style="background:#E24B4A20;color:#FCA5A5;border-color:#E24B4A40">Under Construction</span></div></div>
+<div class="fc fc-wide" style="background:#160A2A;border-color:#7C3AED40" onclick="go('swot')">
+<div class="fc-bar" style="background:linear-gradient(90deg,#7C3AED,#5B21B6)"></div>
+<div class="fc-inner"><div class="fc-icon" style="color:#7C3AED"><svg viewBox="0 0 160 110" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect x="6" y="6" width="68" height="44" rx="5" stroke="currentColor" stroke-width="2" opacity=".9"/><rect x="86" y="6" width="68" height="44" rx="5" stroke="currentColor" stroke-width="2" opacity=".9"/><rect x="6" y="60" width="68" height="44" rx="5" stroke="currentColor" stroke-width="2" opacity=".9"/><rect x="86" y="60" width="68" height="44" rx="5" stroke="currentColor" stroke-width="2" opacity=".9"/><line x1="12" y1="22" x2="66" y2="22" stroke="currentColor" stroke-width="1.8" opacity=".7"/><line x1="12" y1="30" x2="56" y2="30" stroke="currentColor" stroke-width="1.2" opacity=".4"/><line x1="12" y1="36" x2="48" y2="36" stroke="currentColor" stroke-width="1.2" opacity=".4"/><line x1="92" y1="22" x2="146" y2="22" stroke="currentColor" stroke-width="1.8" opacity=".7"/><line x1="92" y1="30" x2="136" y2="30" stroke="currentColor" stroke-width="1.2" opacity=".4"/><line x1="12" y1="76" x2="66" y2="76" stroke="currentColor" stroke-width="1.8" opacity=".7"/><line x1="12" y1="84" x2="56" y2="84" stroke="currentColor" stroke-width="1.2" opacity=".4"/><line x1="92" y1="76" x2="146" y2="76" stroke="currentColor" stroke-width="1.8" opacity=".7"/><line x1="92" y1="84" x2="136" y2="84" stroke="currentColor" stroke-width="1.2" opacity=".4"/><line x1="80" y1="2" x2="80" y2="108" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" opacity=".2"/><line x1="2" y1="54" x2="158" y2="54" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" opacity=".2"/></svg></div>
+<div><div class="fc-name" style="font-size:clamp(15px,4.5vw,20px)">SWOT SLA Geral</div>
+<div class="fc-desc">Análise estratégica completa &middot; Todas as fábricas &middot; Ações SMART &middot; Tarefas &amp; Notas</div>
+<span class="fc-tag" style="background:#7C3AED20;color:#C4B5FD;border-color:#7C3AED40">Completo &#10003;</span></div></div></div>
+</div></div></div>
 
-    <div class="factory-card fc-chassis" onclick="navigate('chassis')">
-      <div class="fc-top"></div>
-      <div class="fc-body">
-        <div class="fc-svg-wrap" style="color:#1D9E75"><svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <rect x="10" y="34" width="120" height="9" rx="3" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <rect x="10" y="55" width="120" height="9" rx="3" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <line x1="30" y1="34" x2="30" y2="64" stroke="currentColor" stroke-width="2" opacity=".75"/>
-  <line x1="55" y1="34" x2="55" y2="64" stroke="currentColor" stroke-width="2" opacity=".75"/>
-  <line x1="80" y1="34" x2="80" y2="64" stroke="currentColor" stroke-width="2" opacity=".75"/>
-  <line x1="105" y1="34" x2="105" y2="64" stroke="currentColor" stroke-width="2" opacity=".75"/>
-  <line x1="18" y1="64" x2="18" y2="78" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <circle cx="18" cy="84" r="8" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="18" cy="84" r="3" fill="currentColor" opacity=".4"/>
-  <line x1="122" y1="64" x2="122" y2="78" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <circle cx="122" cy="84" r="8" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="122" cy="84" r="3" fill="currentColor" opacity=".4"/>
-  <line x1="95" y1="64" x2="95" y2="78" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <circle cx="95" cy="84" r="8" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="95" cy="84" r="3" fill="currentColor" opacity=".4"/>
-  <path d="M10 34 L10 22 Q10 16 18 16 L40 16" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <rect x="40" y="10" width="30" height="26" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".65"/>
-</svg></div>
-        <div class="fc-name">Chassis</div>
-        <div class="fc-desc">F&aacute;brica de Chassis &middot; Linha de montagem estrutural</div>
-        <span class="fc-badge">Em constru&ccedil;&atilde;o</span>
-      </div>
-    </div>
-
-    <div class="factory-card fc-cab" onclick="navigate('cab')">
-      <div class="fc-top"></div>
-      <div class="fc-body">
-        <div class="fc-svg-wrap" style="color:#378ADD"><svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <path d="M20 75 L20 40 Q20 28 32 25 L55 18 Q65 15 75 18 L108 25 Q120 28 120 40 L120 75 Z" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <line x1="20" y1="40" x2="120" y2="40" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
-  <rect x="28" y="28" width="32" height="22" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".8"/>
-  <rect x="68" y="28" width="32" height="22" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".8"/>
-  <path d="M20 75 L20 82 Q20 88 27 88 L113 88 Q120 88 120 82 L120 75" stroke="currentColor" stroke-width="2" opacity=".8"/>
-  <circle cx="35" cy="84" r="7" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="35" cy="84" r="2.5" fill="currentColor" opacity=".4"/>
-  <circle cx="105" cy="84" r="7" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="105" cy="84" r="2.5" fill="currentColor" opacity=".4"/>
-  <line x1="44" y1="75" x2="44" y2="88" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
-  <line x1="96" y1="75" x2="96" y2="88" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
-  <rect x="55" y="62" width="30" height="13" rx="2" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
-  <path d="M20 55 L10 55 L10 70 L20 70" stroke="currentColor" stroke-width="1.8" opacity=".65"/>
-  <path d="M120 55 L130 55 L130 70 L120 70" stroke="currentColor" stroke-width="1.8" opacity=".65"/>
-</svg></div>
-        <div class="fc-name">Cab</div>
-        <div class="fc-desc">F&aacute;brica de Cabinas &middot; Montagem e acabamento</div>
-        <span class="fc-badge">Em constru&ccedil;&atilde;o</span>
-      </div>
-    </div>
-
-    <div class="factory-card fc-transmission" onclick="navigate('transmission')">
-      <div class="fc-top"></div>
-      <div class="fc-body">
-        <div class="fc-svg-wrap" style="color:#EF9F27"><svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <rect x="28" y="22" width="84" height="58" rx="6" stroke="currentColor" stroke-width="2" opacity=".85"/>
-  <circle cx="55" cy="51" r="16" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="55" cy="51" r="6" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <circle cx="85" cy="51" r="11" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="85" cy="51" r="4" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="55" y1="35" x2="55" y2="28" stroke="currentColor" stroke-width="2.5" opacity=".7"/>
-  <line x1="55" y1="67" x2="55" y2="74" stroke="currentColor" stroke-width="2.5" opacity=".7"/>
-  <line x1="39" y1="43" x2="34" y2="40" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="39" y1="59" x2="34" y2="62" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="71" y1="43" x2="74" y2="41" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="71" y1="59" x2="74" y2="61" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="8" y1="51" x2="28" y2="51" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <rect x="4" y="46" width="8" height="10" rx="2" fill="currentColor" opacity=".2" stroke="currentColor" stroke-width="1.5"/>
-  <line x1="112" y1="51" x2="130" y2="51" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <rect x="128" y="46" width="8" height="10" rx="2" fill="currentColor" opacity=".2" stroke="currentColor" stroke-width="1.5"/>
-  <line x1="85" y1="40" x2="85" y2="30" stroke="currentColor" stroke-width="2" opacity=".6"/>
-  <rect x="80" y="26" width="10" height="8" rx="2" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
-</svg></div>
-        <div class="fc-name">Transmission</div>
-        <div class="fc-desc">F&aacute;brica de Transmiss&otilde;es &middot; Caixas e eixos</div>
-        <span class="fc-badge">Em constru&ccedil;&atilde;o</span>
-      </div>
-    </div>
-
-    <div class="factory-card fc-engine" onclick="navigate('engine')">
-      <div class="fc-top"></div>
-      <div class="fc-body">
-        <div class="fc-svg-wrap" style="color:#E24B4A"><svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <rect x="25" y="38" width="80" height="38" rx="4" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <rect x="32" y="22" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".85"/>
-  <rect x="54" y="22" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".85"/>
-  <rect x="76" y="22" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".85"/>
-  <line x1="39" y1="24" x2="39" y2="38" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="61" y1="24" x2="61" y2="38" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="83" y1="24" x2="83" y2="38" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="25" y1="60" x2="105" y2="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3" opacity=".5"/>
-  <path d="M30 76 Q65 83 100 76" stroke="currentColor" stroke-width="1.8" opacity=".7"/>
-  <circle cx="116" cy="47" r="10" stroke="currentColor" stroke-width="2" opacity=".85"/>
-  <path d="M106 47 L116 40 L116 54 Z" fill="currentColor" opacity=".5"/>
-  <line x1="105" y1="47" x2="106" y2="47" stroke="currentColor" stroke-width="2"/>
-  <line x1="116" y1="38" x2="116" y2="22" stroke="currentColor" stroke-width="1.8" stroke-dasharray="3,2" opacity=".6"/>
-  <rect x="8" y="44" width="17" height="8" rx="2" stroke="currentColor" stroke-width="1.8" opacity=".75"/>
-</svg></div>
-        <div class="fc-name">Engine</div>
-        <div class="fc-desc">F&aacute;brica de Motores &middot; Bloco, cabe&ccedil;ote e testes</div>
-        <span class="fc-badge">Em constru&ccedil;&atilde;o</span>
-      </div>
-    </div>
-
-    <div class="factory-card fc-swot full-width" onclick="navigate('swot-geral')">
-      <div class="fc-top"></div>
-      <div class="fc-body" style="display:flex;align-items:center;gap:20px;">
-        <div style="width:130px;height:90px;flex-shrink:0;color:#7C3AED"><svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <rect x="10" y="10" width="56" height="36" rx="4" stroke="currentColor" stroke-width="1.8" opacity=".9"/>
-  <rect x="74" y="10" width="56" height="36" rx="4" stroke="currentColor" stroke-width="1.8" opacity=".9"/>
-  <rect x="10" y="54" width="56" height="36" rx="4" stroke="currentColor" stroke-width="1.8" opacity=".9"/>
-  <rect x="74" y="54" width="56" height="36" rx="4" stroke="currentColor" stroke-width="1.8" opacity=".9"/>
-  <line x1="14" y1="30" x2="56" y2="30" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
-  <line x1="14" y1="36" x2="50" y2="36" stroke="currentColor" stroke-width="1" opacity=".4"/>
-  <line x1="78" y1="30" x2="120" y2="30" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
-  <line x1="78" y1="36" x2="114" y2="36" stroke="currentColor" stroke-width="1" opacity=".4"/>
-  <line x1="14" y1="72" x2="56" y2="72" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
-  <line x1="14" y1="78" x2="50" y2="78" stroke="currentColor" stroke-width="1" opacity=".4"/>
-  <line x1="78" y1="72" x2="120" y2="72" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
-  <line x1="78" y1="78" x2="114" y2="78" stroke="currentColor" stroke-width="1" opacity=".4"/>
-  <circle cx="38" cy="22" r="7" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
-  <line x1="38" y1="18" x2="38" y2="26" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
-  <line x1="34" y1="22" x2="42" y2="22" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
-  <line x1="70" y1="5" x2="70" y2="95" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" opacity=".25"/>
-  <line x1="5" y1="48" x2="135" y2="48" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3" opacity=".25"/>
-</svg></div>
-        <div>
-          <div class="fc-name" style="font-size:clamp(15px,4vw,20px)">SWOT SLA Geral</div>
-          <div class="fc-desc">An&aacute;lise estrat&eacute;gica completa &middot; Todas as f&aacute;bricas &middot; A&ccedil;&otilde;es SMART com tarefas e notas</div>
-          <span class="fc-badge" style="background:#7C3AED25;color:#C4B5FD;">Completo &#10003;</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
+<div class="pg" id="pg-chassis">
+<div class="topbar"><button class="btn-back" style="color:#9FE1CB;border-color:#1D9E7550;background:#1D9E7520" onclick="go('home')">&#8592; Voltar</button><span class="tb-title">SWOT · Chassis</span><button class="btn-exp" onclick="openExport()">&#8595; Exportar</button></div>
+<div class="app">
+<div class="tabs"><div class="tab tab-s active" id="tab-chassis-s" onclick="switchFac('chassis','s')">&#128170; For&#231;as</div><div class="tab tab-w" id="tab-chassis-w" onclick="switchFac('chassis','w')">&#9888;&#65039; Fraquezas</div><div class="tab tab-o" id="tab-chassis-o" onclick="switchFac('chassis','o')">&#128640; Oportunidades</div><div class="tab tab-t" id="tab-chassis-t" onclick="switchFac('chassis','t')">&#128293; Amea&#231;as</div></div>
+<div class="panel panel-s active" id="panel-chassis-s"><div class="panel-label">For&#231;as — Strengths</div><div class="grp"><div class="grp-title">Posição Comercial</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Liderança em ferramentas de chassis <span class="badge b-key">chave</span></div><div class="item-desc">Alta penetração nos processos de fixação estrutural da linha de chassis.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-dominar" data-aid="c-s1a1"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Mapear 100% dos pontos de torque do chassis e cobertura AC</div>Levantar cada ponto de fixação estrutural e identificar onde há gap de cobertura — em 30 dias.</div></div></div>
+<div class="action act-manter" data-aid="c-s1a2"><div class="action-top"><div class="act-pill">Manter</div><div class="act-body"><div class="act-what">Apresentar relatório de savings mensal para a equipe de chassis</div>Consolidar R$ economizados e ganhos de qualidade por processo — entrega mensal.</div></div></div>
+</div></div>
+<div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Soluções de torque crítico para longarinas <span class="badge b-key">chave</span></div><div class="item-desc">Ferramentas com rastreabilidade garantem conformidade nas uniões estruturais do frame.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-dominar" data-aid="c-s2a1"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Demonstrar rastreabilidade de torque nos pontos críticos do frame</div>Apresentar relatório de torque por VIN para a engenharia de chassis — em 45 dias.</div></div></div>
+<div class="action act-manter" data-aid="c-s2a2"><div class="action-top"><div class="act-pill">Manter</div><div class="act-body"><div class="act-what">Revisitar especificações de torque a cada novo modelo de chassis</div>Garantir presença na fase de engenharia para cada nova variante — ciclo por lançamento.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Suporte Técnico</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Engenharia dedicada ao processo de chassis <span class="badge b-key">chave</span></div><div class="item-desc">Equipe de aplicação presente no chão de fábrica para suporte contínuo.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-manter" data-aid="c-s3a1"><div class="action-top"><div class="act-pill">Manter</div><div class="act-body"><div class="act-what">Realizar visita técnica semanal à linha de chassis</div>Agenda fixa de presença — registrar ações e oportunidades identificadas.</div></div></div>
+<div class="action act-dominar" data-aid="c-s3a2"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Propor co-desenvolvimento de solução para ponto crítico da longarina</div>Identificar o processo mais complexo e propor projeto conjunto com a engenharia.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-w " id="panel-chassis-w"><div class="panel-label">Fraquezas — Weaknesses</div><div class="grp"><div class="grp-title">Portfólio</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Ausência de ferramenta simples para operações básicas do chassis <span class="badge b-high">crítico</span></div><div class="item-desc">Operações de menor criticidade ainda usam concorrente por custo.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-melhorar" data-aid="c-w1a1"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Mapear operações básicas do chassis sem cobertura AC</div>Listar processos onde concorrente está instalado por custo — em 30 dias.</div></div></div>
+<div class="action act-melhorar" data-aid="c-w1a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Avaliar bundle de entrada para operações de baixa criticidade</div>Propor pacote econômico ou parceria para fechar o gap — em 60 dias.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Execução</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Prazo em ferramentas especiais para chassis <span class="badge b-high">crítico</span></div><div class="item-desc">Projetos de adaptação de ferramentas para geometrias específicas de frame geram atrasos.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-melhorar" data-aid="c-w2a1"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Implementar cronograma com alertas de desvio para projetos especiais de chassis</div>Template de acompanhamento com milestones — obrigatório no próximo projeto.</div></div></div>
+<div class="action act-melhorar" data-aid="c-w2a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Criar protocolo de comunicação proativa ao cliente em caso de risco de prazo</div>Aviso mínimo 24h antes com plano alternativo — formalizar agora.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-o " id="panel-chassis-o"><div class="panel-label">Oportunidades — Opportunities</div><div class="grp"><div class="grp-title">Crescimento</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Novos modelos de chassis elétrico e híbrido Scania <span class="badge b-key">prioritário</span></div><div class="item-desc">Eletrificação exige novos pontos de fixação e novos processos — janela de especificação.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-aproveitar" data-aid="c-o1a1"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Identificar projetos de chassis EV em fase de especificação</div>Mapear com a engenharia os novos modelos em desenvolvimento — próxima visita.</div></div></div>
+<div class="action act-aproveitar" data-aid="c-o1a2"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Apresentar proposta de solução integrada para chassis EV</div>Proposta SW+HW+Service para os novos pontos de fixação da bateria — em 60 dias.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Tecnologia</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Smart Integrated Assembly na linha de chassis <span class="badge b-key">prioritário</span></div><div class="item-desc">Rastreabilidade por VIN e dados em tempo real são diferenciais crescentes.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-aproveitar" data-aid="c-o2a1"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Apresentar piloto de torque conectado para 3 pontos críticos do frame</div>Demonstração com dados em tempo real para a engenharia — em 90 dias.</div></div></div>
+<div class="action act-aproveitar" data-aid="c-o2a2"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Mapear maturidade digital da linha para roadmap de Smart Assembly</div>Identificar processos prontos para integração — roadmap em 60 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-t " id="panel-chassis-t"><div class="panel-label">Amea&#231;as — Threats</div><div class="grp"><div class="grp-title">Competição</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Concorrentes com preço menor para fixações não estruturais do chassis <span class="badge b-high">crítico</span></div><div class="item-desc">Processos de menor criticidade são vulneráveis à entrada por preço.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-mitigar" data-aid="c-t1a1"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Criar argumento de TCO para fixações não estruturais do chassis</div>Planilha comparando custo total AC vs concorrente — disponível em 30 dias.</div></div></div>
+<div class="action act-mitigar" data-aid="c-t1a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Aprofundar relacionamento com engenharia para blindar especificações</div>Garantir que AC esteja na especificação técnica de todo processo — ação contínua.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Risco Corporativo</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Diretriz Grupo VW impondo fornecedor alternativo no chassis <span class="badge b-high">crítico</span></div><div class="item-desc">Acordos corporativos podem sobrepor preferência técnica local.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-mitigar" data-aid="c-t2a1"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Documentar ROI e savings do chassis para criar resistência interna</div>Evidências concretas que a engenharia possa usar contra imposição corporativa.</div></div></div>
+<div class="action act-mitigar" data-aid="c-t2a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Escalar risco à liderança AC para ação em nível de Grupo VW</div>Relatório de risco com dados do chassis — entregar à diretoria em 30 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="footer"><span class="badge b-high">cr&#237;tico</span> <span class="badge b-med">aten&#231;&#227;o</span> <span class="badge b-key">chave</span></div>
 </div>
 </div>
 
-<!-- CHASSIS PAGE -->
-<div class="page" id="page-chassis"><div class="sub-page-wrap">
-  <div class="sub-topbar">
-    <button class="btn-back" onclick="navigate('main')">&#8592; Voltar</button>
-    <span class="sub-topbar-title">Chassis</span>
-    <div style="width:80px"></div>
-  </div>
-  <div class="coming-soon">
-    <div class="cs-icon" style="color:#1D9E75"><svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <rect x="10" y="34" width="120" height="9" rx="3" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <rect x="10" y="55" width="120" height="9" rx="3" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <line x1="30" y1="34" x2="30" y2="64" stroke="currentColor" stroke-width="2" opacity=".75"/>
-  <line x1="55" y1="34" x2="55" y2="64" stroke="currentColor" stroke-width="2" opacity=".75"/>
-  <line x1="80" y1="34" x2="80" y2="64" stroke="currentColor" stroke-width="2" opacity=".75"/>
-  <line x1="105" y1="34" x2="105" y2="64" stroke="currentColor" stroke-width="2" opacity=".75"/>
-  <line x1="18" y1="64" x2="18" y2="78" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <circle cx="18" cy="84" r="8" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="18" cy="84" r="3" fill="currentColor" opacity=".4"/>
-  <line x1="122" y1="64" x2="122" y2="78" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <circle cx="122" cy="84" r="8" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="122" cy="84" r="3" fill="currentColor" opacity=".4"/>
-  <line x1="95" y1="64" x2="95" y2="78" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <circle cx="95" cy="84" r="8" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="95" cy="84" r="3" fill="currentColor" opacity=".4"/>
-  <path d="M10 34 L10 22 Q10 16 18 16 L40 16" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <rect x="40" y="10" width="30" height="26" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".65"/>
-</svg></div>
-    <span class="cs-badge" style="background:#1D9E7520;color:#9FE1CB;">Chassis Factory</span>
-    <h2 class="cs-title">Em Constru&ccedil;&atilde;o</h2>
-    <p class="cs-desc">A SWOT espec&iacute;fica para a F&aacute;brica de Chassis estar&aacute; dispon&iacute;vel em breve.</p>
-  </div>
-</div></div>
 
-<!-- CAB PAGE -->
-<div class="page" id="page-cab"><div class="sub-page-wrap">
-  <div class="sub-topbar">
-    <button class="btn-back" onclick="navigate('main')">&#8592; Voltar</button>
-    <span class="sub-topbar-title">Cab</span>
-    <div style="width:80px"></div>
-  </div>
-  <div class="coming-soon">
-    <div class="cs-icon" style="color:#378ADD"><svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <path d="M20 75 L20 40 Q20 28 32 25 L55 18 Q65 15 75 18 L108 25 Q120 28 120 40 L120 75 Z" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <line x1="20" y1="40" x2="120" y2="40" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
-  <rect x="28" y="28" width="32" height="22" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".8"/>
-  <rect x="68" y="28" width="32" height="22" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".8"/>
-  <path d="M20 75 L20 82 Q20 88 27 88 L113 88 Q120 88 120 82 L120 75" stroke="currentColor" stroke-width="2" opacity=".8"/>
-  <circle cx="35" cy="84" r="7" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="35" cy="84" r="2.5" fill="currentColor" opacity=".4"/>
-  <circle cx="105" cy="84" r="7" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="105" cy="84" r="2.5" fill="currentColor" opacity=".4"/>
-  <line x1="44" y1="75" x2="44" y2="88" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
-  <line x1="96" y1="75" x2="96" y2="88" stroke="currentColor" stroke-width="1.5" opacity=".5"/>
-  <rect x="55" y="62" width="30" height="13" rx="2" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
-  <path d="M20 55 L10 55 L10 70 L20 70" stroke="currentColor" stroke-width="1.8" opacity=".65"/>
-  <path d="M120 55 L130 55 L130 70 L120 70" stroke="currentColor" stroke-width="1.8" opacity=".65"/>
-</svg></div>
-    <span class="cs-badge" style="background:#378ADD20;color:#B5D4F4;">Cab Factory</span>
-    <h2 class="cs-title">Em Constru&ccedil;&atilde;o</h2>
-    <p class="cs-desc">A SWOT espec&iacute;fica para a F&aacute;brica de Cabinas estar&aacute; dispon&iacute;vel em breve.</p>
-  </div>
+<div class="pg" id="pg-cab">
+<div class="topbar"><button class="btn-back" style="color:#B5D4F4;border-color:#378ADD50;background:#378ADD20" onclick="go('home')">&#8592; Voltar</button><span class="tb-title">SWOT · Cab</span><button class="btn-exp" onclick="openExport()">&#8595; Exportar</button></div>
+<div class="app">
+<div class="tabs"><div class="tab tab-s active" id="tab-cab-s" onclick="switchFac('cab','s')">&#128170; For&#231;as</div><div class="tab tab-w" id="tab-cab-w" onclick="switchFac('cab','w')">&#9888;&#65039; Fraquezas</div><div class="tab tab-o" id="tab-cab-o" onclick="switchFac('cab','o')">&#128640; Oportunidades</div><div class="tab tab-t" id="tab-cab-t" onclick="switchFac('cab','t')">&#128293; Amea&#231;as</div></div>
+<div class="panel panel-s active" id="panel-cab-s"><div class="panel-label">For&#231;as — Strengths</div><div class="grp"><div class="grp-title">Posição Comercial</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Ferramentas ergonômicas para montagem de cabina <span class="badge b-key">chave</span></div><div class="item-desc">Portfolio com soluções pensadas para o espaço restrito e operações repetitivas da linha de cab.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-manter" data-aid="b-s1a1"><div class="action-top"><div class="act-pill">Manter</div><div class="act-body"><div class="act-what">Validar ergonomia das ferramentas atuais com operadores da linha de cab</div>Entrevista e observação no chão de fábrica — próxima semana.</div></div></div>
+<div class="action act-dominar" data-aid="b-s1a2"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Apresentar proposta de ferramenta balanceada para ponto de fixação do painel</div>Reduzir esforço repetitivo com solução balanceada — proposta em 45 dias.</div></div></div>
 </div></div>
-
-<!-- TRANSMISSION PAGE -->
-<div class="page" id="page-transmission"><div class="sub-page-wrap">
-  <div class="sub-topbar">
-    <button class="btn-back" onclick="navigate('main')">&#8592; Voltar</button>
-    <span class="sub-topbar-title">Transmission</span>
-    <div style="width:80px"></div>
-  </div>
-  <div class="coming-soon">
-    <div class="cs-icon" style="color:#EF9F27"><svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <rect x="28" y="22" width="84" height="58" rx="6" stroke="currentColor" stroke-width="2" opacity=".85"/>
-  <circle cx="55" cy="51" r="16" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="55" cy="51" r="6" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <circle cx="85" cy="51" r="11" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <circle cx="85" cy="51" r="4" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="55" y1="35" x2="55" y2="28" stroke="currentColor" stroke-width="2.5" opacity=".7"/>
-  <line x1="55" y1="67" x2="55" y2="74" stroke="currentColor" stroke-width="2.5" opacity=".7"/>
-  <line x1="39" y1="43" x2="34" y2="40" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="39" y1="59" x2="34" y2="62" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="71" y1="43" x2="74" y2="41" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="71" y1="59" x2="74" y2="61" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="8" y1="51" x2="28" y2="51" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <rect x="4" y="46" width="8" height="10" rx="2" fill="currentColor" opacity=".2" stroke="currentColor" stroke-width="1.5"/>
-  <line x1="112" y1="51" x2="130" y2="51" stroke="currentColor" stroke-width="2.5" opacity=".8"/>
-  <rect x="128" y="46" width="8" height="10" rx="2" fill="currentColor" opacity=".2" stroke="currentColor" stroke-width="1.5"/>
-  <line x1="85" y1="40" x2="85" y2="30" stroke="currentColor" stroke-width="2" opacity=".6"/>
-  <rect x="80" y="26" width="10" height="8" rx="2" stroke="currentColor" stroke-width="1.5" opacity=".7"/>
-</svg></div>
-    <span class="cs-badge" style="background:#EF9F2720;color:#FAC775;">Transmission Factory</span>
-    <h2 class="cs-title">Em Constru&ccedil;&atilde;o</h2>
-    <p class="cs-desc">A SWOT espec&iacute;fica para a F&aacute;brica de Transmiss&otilde;es estar&aacute; dispon&iacute;vel em breve.</p>
-  </div>
-</div></div>
-
-<!-- ENGINE PAGE -->
-<div class="page" id="page-engine"><div class="sub-page-wrap">
-  <div class="sub-topbar">
-    <button class="btn-back" onclick="navigate('main')">&#8592; Voltar</button>
-    <span class="sub-topbar-title">Engine</span>
-    <div style="width:80px"></div>
-  </div>
-  <div class="coming-soon">
-    <div class="cs-icon" style="color:#E24B4A"><svg viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-  <rect x="25" y="38" width="80" height="38" rx="4" stroke="currentColor" stroke-width="2" opacity=".9"/>
-  <rect x="32" y="22" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".85"/>
-  <rect x="54" y="22" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".85"/>
-  <rect x="76" y="22" width="14" height="18" rx="3" stroke="currentColor" stroke-width="1.8" opacity=".85"/>
-  <line x1="39" y1="24" x2="39" y2="38" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="61" y1="24" x2="61" y2="38" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="83" y1="24" x2="83" y2="38" stroke="currentColor" stroke-width="2" opacity=".7"/>
-  <line x1="25" y1="60" x2="105" y2="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5,3" opacity=".5"/>
-  <path d="M30 76 Q65 83 100 76" stroke="currentColor" stroke-width="1.8" opacity=".7"/>
-  <circle cx="116" cy="47" r="10" stroke="currentColor" stroke-width="2" opacity=".85"/>
-  <path d="M106 47 L116 40 L116 54 Z" fill="currentColor" opacity=".5"/>
-  <line x1="105" y1="47" x2="106" y2="47" stroke="currentColor" stroke-width="2"/>
-  <line x1="116" y1="38" x2="116" y2="22" stroke="currentColor" stroke-width="1.8" stroke-dasharray="3,2" opacity=".6"/>
-  <rect x="8" y="44" width="17" height="8" rx="2" stroke="currentColor" stroke-width="1.8" opacity=".75"/>
-</svg></div>
-    <span class="cs-badge" style="background:#E24B4A20;color:#FCA5A5;">Engine Factory</span>
-    <h2 class="cs-title">Em Constru&ccedil;&atilde;o</h2>
-    <p class="cs-desc">A SWOT espec&iacute;fica para a F&aacute;brica de Motores estar&aacute; dispon&iacute;vel em breve.</p>
-  </div>
-</div></div>
-
-<!-- SWOT GERAL PAGE -->
-<div class="page" id="page-swot-geral"><div class="sub-page-wrap">
-  <div class="sub-topbar">
-    <button class="btn-back" onclick="navigate('main')">&#8592; Voltar</button>
-    <span class="sub-topbar-title">SWOT SLA Geral</span>
-    <button class="btn-export-top" onclick="openExport()">&#8595; Exportar</button>
-  </div>
-<div class="export-topbar">
-  <span class="export-topbar-title">Atlas Copco × Scania</span>
-  <button class="btn-export-top" onclick="openExport()">⬇ Exportar SWOT</button>
 </div>
+<div class="grp"><div class="grp-title">Qualidade e Rastreabilidade</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Rastreabilidade de torque em fixadores de segurança da cabina <span class="badge b-key">chave</span></div><div class="item-desc">Parafusos de airbag, cintos e estrutura da cab são safety-critical — rastreabilidade obrigatória.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-dominar" data-aid="b-s2a1"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Mapear 100% dos pontos safety-critical da cabina com cobertura AC</div>Levantamento por estação de montagem — entregar à engenharia em 30 dias.</div></div></div>
+<div class="action act-manter" data-aid="b-s2a2"><div class="action-top"><div class="act-pill">Manter</div><div class="act-body"><div class="act-what">Apresentar relatório de NOK (não-conformidades) zerado por processo</div>Consolidar dados mensais de qualidade por ponto de fixação da cab.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-w " id="panel-cab-w"><div class="panel-label">Fraquezas — Weaknesses</div><div class="grp"><div class="grp-title">Portfólio</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Custo elevado em operações de acabamento interno da cabina <span class="badge b-high">crítico</span></div><div class="item-desc">Processos de fixação de plásticos e acabamentos sofrem pressão de preço.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-melhorar" data-aid="b-w1a1"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Mapear processos de acabamento com maior pressão de custo na cab</div>Identificar onde concorrente entra por preço — levantamento em 30 dias.</div></div></div>
+<div class="action act-melhorar" data-aid="b-w1a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Avaliar solução de menor custo para fixações de baixa criticidade da cabina</div>Bundle econômico ou ferramenta simplificada para acabamentos — avaliar em 60 dias.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Relacionamento</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Acesso limitado ao gestor de produção da fábrica de cab <span class="badge b-med">atenção</span></div><div class="item-desc">Relacionamento concentrado no nível técnico, sem acesso à chefia de linha.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-melhorar" data-aid="b-w2a1"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Mapear gestores de produção e supervisores da linha de cab</div>Criar mapa de stakeholders operacionais da fábrica — em 30 dias.</div></div></div>
+<div class="action act-melhorar" data-aid="b-w2a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Usar resultado de qualidade como pauta para reunião com gestor de produção</div>Solicitar reunião com apresentação de dados de NOK zerado — em 45 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-o " id="panel-cab-o"><div class="panel-label">Oportunidades — Opportunities</div><div class="grp"><div class="grp-title">Novos Projetos</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Novo design de cabina Scania — janela de especificação <span class="badge b-key">prioritário</span></div><div class="item-desc">Atualizações de cab criam oportunidade de especificar ferramentas desde o início.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-aproveitar" data-aid="b-o1a1"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Identificar projetos de nova cabina em fase de engenharia</div>Mapear com time técnico da cab os modelos em desenvolvimento — próxima visita.</div></div></div>
+<div class="action act-aproveitar" data-aid="b-o1a2"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Garantir presença AC na fase de especificação de fixadores da nova cab</div>Formalizar inclusão nas reuniões de engenharia de produto — em 30 dias.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Tecnologia</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Smart Integrated Assembly para safety-critical da cabina <span class="badge b-key">prioritário</span></div><div class="item-desc">Conectividade e dados em tempo real são exigidos para rastreabilidade de segurança.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-aproveitar" data-aid="b-o2a1"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Piloto de torque conectado nos 5 pontos de airbag da cabina</div>Demonstração com dados em tempo real — apresentar à engenharia em 90 dias.</div></div></div>
+<div class="action act-aproveitar" data-aid="b-o2a2"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Propor integração dos dados de torque com o MES da fábrica de cab</div>Roadmap de integração SW+MES — apresentar em 60 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-t " id="panel-cab-t"><div class="panel-label">Amea&#231;as — Threats</div><div class="grp"><div class="grp-title">Competição</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Concorrentes com preço menor para fixações de acabamento da cab <span class="badge b-high">crítico</span></div><div class="item-desc">Operações de plásticos e painéis perdem para concorrente em custo.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-mitigar" data-aid="b-t1a1"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Criar argumento de TCO para todo processo de acabamento da cabina</div>Comparativo custo total incluindo retrabalho e qualidade — em 30 dias.</div></div></div>
+<div class="action act-mitigar" data-aid="b-t1a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Apresentar casos de falha de concorrente em processos similares</div>Repositório de NOK de concorrente para usar em negociações — em 30 dias.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Risco Corporativo</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Imposição de fornecedor pelo Grupo VW na fábrica de cab <span class="badge b-high">crítico</span></div><div class="item-desc">Diretriz corporativa pode sobrepor a preferência técnica da equipe de cab.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-mitigar" data-aid="b-t2a1"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Documentar savings e NOK zerado da cabina como evidência de valor</div>Material concreto para a engenharia usar contra imposição corporativa.</div></div></div>
+<div class="action act-mitigar" data-aid="b-t2a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Escalar risco do cab à liderança AC para ação corporativa</div>Relatório com dados da fábrica de cab — entregar à diretoria em 30 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="footer"><span class="badge b-high">cr&#237;tico</span> <span class="badge b-med">aten&#231;&#227;o</span> <span class="badge b-key">chave</span></div>
+</div>
+</div>
+
+
+<div class="pg" id="pg-transmission">
+<div class="topbar"><button class="btn-back" style="color:#FAC775;border-color:#EF9F2750;background:#EF9F2720" onclick="go('home')">&#8592; Voltar</button><span class="tb-title">SWOT · Transmission</span><button class="btn-exp" onclick="openExport()">&#8595; Exportar</button></div>
+<div class="app">
+<div class="tabs"><div class="tab tab-s active" id="tab-transmission-s" onclick="switchFac('transmission','s')">&#128170; For&#231;as</div><div class="tab tab-w" id="tab-transmission-w" onclick="switchFac('transmission','w')">&#9888;&#65039; Fraquezas</div><div class="tab tab-o" id="tab-transmission-o" onclick="switchFac('transmission','o')">&#128640; Oportunidades</div><div class="tab tab-t" id="tab-transmission-t" onclick="switchFac('transmission','t')">&#128293; Amea&#231;as</div></div>
+<div class="panel panel-s active" id="panel-transmission-s"><div class="panel-label">For&#231;as — Strengths</div><div class="grp"><div class="grp-title">Precisão e Qualidade</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Referência global em torque de precisão para transmissões <span class="badge b-key">chave</span></div><div class="item-desc">Processos de montagem de caixa de câmbio exigem torque crítico — AC é referência Scania Europa.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-dominar" data-aid="t-s1a1"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Apresentar cases de transmissões Scania Europa com dados de qualidade</div>Solicitar ao time global 3 cases documentados — receber em 30 dias.</div></div></div>
+<div class="action act-manter" data-aid="t-s1a2"><div class="action-top"><div class="act-pill">Manter</div><div class="act-body"><div class="act-what">Entregar relatório mensal de qualidade por estação de montagem da transmissão</div>Consolidar dados de NOK e Cpk por ponto de torque — entrega mensal.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Portfólio Integrado</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Solução SW+HW para rastreabilidade total da transmissão <span class="badge b-key">chave</span></div><div class="item-desc">Integração de dados de torque com MES garante conformidade de cada unidade produzida.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-dominar" data-aid="t-s2a1"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Mapear estações da transmissão com e sem integração SW</div>Levantar gap de integração por estação — mapeamento em 30 dias.</div></div></div>
+<div class="action act-dominar" data-aid="t-s2a2"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Propor pacote de integração completa para a linha de transmissão</div>Proposta SW+HW+integração MES — apresentar em 60 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-w " id="panel-transmission-w"><div class="panel-label">Fraquezas — Weaknesses</div><div class="grp"><div class="grp-title">Prazo e Execução</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Atraso em ferramentas especiais para geometrias da caixa de câmbio <span class="badge b-high">crítico</span></div><div class="item-desc">Adaptações para espaços restritos da transmissão têm lead time elevado.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-melhorar" data-aid="t-w1a1"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Implementar cronograma com alertas para projetos especiais da transmissão</div>Template obrigatório com milestones e responsáveis — aplicar no próximo projeto.</div></div></div>
+<div class="action act-melhorar" data-aid="t-w1a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Criar protocolo de comunicação proativa para riscos de prazo</div>Aviso mínimo 24h com alternativa — formalizar agora.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Portfólio</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Custo elevado em operações de subconjunto da transmissão <span class="badge b-med">atenção</span></div><div class="item-desc">Montagem de componentes secundários da caixa sofre pressão de preço.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-melhorar" data-aid="t-w2a1"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Identificar processos de subconjunto com maior pressão de custo</div>Mapear onde concorrente compete por preço — em 30 dias.</div></div></div>
+<div class="action act-melhorar" data-aid="t-w2a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Avaliar bundle econômico para subconjuntos da transmissão</div>Proposta de pacote de menor custo para processos secundários — em 60 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-o " id="panel-transmission-o"><div class="panel-label">Oportunidades — Opportunities</div><div class="grp"><div class="grp-title">Eletrificação</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Transmissões elétricas e híbridas — novos processos Scania <span class="badge b-key">prioritário</span></div><div class="item-desc">Eletro-mobilidade cria novos conjuntos de fixação e torques críticos diferentes.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-aproveitar" data-aid="t-o1a1"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Identificar projetos de e-transmission em fase de especificação na Scania</div>Mapear com a engenharia os novos projetos — próxima visita técnica.</div></div></div>
+<div class="action act-aproveitar" data-aid="t-o1a2"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Apresentar proposta de solução para montagem de e-axle e bateria</div>Proposta completa para os novos processos elétricos — em 60 dias.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Smart Assembly</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Smart Integrated Assembly para linha de transmissão <span class="badge b-key">prioritário</span></div><div class="item-desc">Dados em tempo real e Cpk automático são diferenciais críticos nesta linha.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-aproveitar" data-aid="t-o2a1"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Piloto de torque conectado com Cpk em tempo real na linha de transmissão</div>Demonstração nas 3 estações mais críticas — em 90 dias.</div></div></div>
+<div class="action act-aproveitar" data-aid="t-o2a2"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Propor integração dos dados de torque com o sistema de qualidade da transmissão</div>Roadmap de integração — apresentar em 60 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-t " id="panel-transmission-t"><div class="panel-label">Amea&#231;as — Threats</div><div class="grp"><div class="grp-title">Competição Especializada</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Concorrentes especializados em ferramentas de transmissão <span class="badge b-high">crítico</span></div><div class="item-desc">Alguns concorrentes têm foco exclusivo em transmissões com preço competitivo.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-mitigar" data-aid="t-t1a1"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Criar comparativo técnico AC vs concorrentes especializados em transmissão</div>Benchmarking objetivo de qualidade, precisão e suporte — em 60 dias.</div></div></div>
+<div class="action act-mitigar" data-aid="t-t1a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Fortalecer relacionamento técnico com engenharia da transmissão</div>Visita semanal + workshop semestral — agenda fixa a partir desta semana.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Risco Corporativo</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Padronização Grupo VW impondo ferramenta alternativa na transmissão <span class="badge b-high">crítico</span></div><div class="item-desc">Processos de transmissão têm alto risco de imposição corporativa.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-mitigar" data-aid="t-t2a1"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Documentar Cpk e savings da transmissão como evidência incontestável</div>Relatório técnico com dados de qualidade — entregar à engenharia e à diretoria.</div></div></div>
+<div class="action act-mitigar" data-aid="t-t2a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Usar cases da Scania Europa como argumento de padronização global AC</div>Mostrar que a própria corporação usa AC em outras plantas — próxima reunião.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="footer"><span class="badge b-high">cr&#237;tico</span> <span class="badge b-med">aten&#231;&#227;o</span> <span class="badge b-key">chave</span></div>
+</div>
+</div>
+
+
+<div class="pg" id="pg-engine">
+<div class="topbar"><button class="btn-back" style="color:#FCA5A5;border-color:#E24B4A50;background:#E24B4A20" onclick="go('home')">&#8592; Voltar</button><span class="tb-title">SWOT · Engine</span><button class="btn-exp" onclick="openExport()">&#8595; Exportar</button></div>
+<div class="app">
+<div class="tabs"><div class="tab tab-s active" id="tab-engine-s" onclick="switchFac('engine','s')">&#128170; For&#231;as</div><div class="tab tab-w" id="tab-engine-w" onclick="switchFac('engine','w')">&#9888;&#65039; Fraquezas</div><div class="tab tab-o" id="tab-engine-o" onclick="switchFac('engine','o')">&#128640; Oportunidades</div><div class="tab tab-t" id="tab-engine-t" onclick="switchFac('engine','t')">&#128293; Amea&#231;as</div></div>
+<div class="panel panel-s active" id="panel-engine-s"><div class="panel-label">For&#231;as — Strengths</div><div class="grp"><div class="grp-title">Precisão Crítica</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Referência em torque de motor — processos safety-critical <span class="badge b-key">chave</span></div><div class="item-desc">Cabeçote, bielas e bloco têm torques absolutamente críticos — AC é fornecedor preferido da engenharia.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-dominar" data-aid="e-s1a1"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Apresentar cases de motores Scania com zero NOK em torques críticos</div>Consolidar dados históricos de qualidade do motor — apresentar em 30 dias.</div></div></div>
+<div class="action act-manter" data-aid="e-s1a2"><div class="action-top"><div class="act-pill">Manter</div><div class="act-body"><div class="act-what">Entregar relatório mensal de Cpk por ponto crítico do motor</div>Consolidar Cpk de cabeçote, bielas e bloco — entrega mensal à engenharia.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Tecnologia e Integração</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Software de rastreabilidade integrado à linha de motores <span class="badge b-key">chave</span></div><div class="item-desc">Dados de torque por número de motor garantem conformidade e rastreabilidade total.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-dominar" data-aid="e-s2a1"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Mapear estações do motor com e sem integração de dados</div>Levantar gap de SW por estação — mapeamento em 30 dias.</div></div></div>
+<div class="action act-dominar" data-aid="e-s2a2"><div class="action-top"><div class="act-pill">Dominar</div><div class="act-body"><div class="act-what">Propor integração completa dos dados de torque com o MES do motor</div>Roadmap SW+MES — apresentar à engenharia em 60 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-w " id="panel-engine-w"><div class="panel-label">Fraquezas — Weaknesses</div><div class="grp"><div class="grp-title">Qualidade em Projetos Especiais</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Problemas de qualidade em ferramentas especiais para o motor <span class="badge b-high">crítico</span></div><div class="item-desc">Adaptações para espaços restritos do motor (cabeçote, coletor) geraram não-conformidades.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-melhorar" data-aid="e-w1a1"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Implementar quality gate antes de cada entrega especial para o motor</div>Checklist técnico obrigatório com aprovação formal — aplicar no próximo projeto.</div></div></div>
+<div class="action act-melhorar" data-aid="e-w1a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Criar plano de ação corretiva em 48h para qualquer NOK do motor</div>Procedimento de resposta rápida com responsável definido — formalizar em 15 dias.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Percepção de Imagem</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Impacto do contrato de serviços perdido na fábrica de motores <span class="badge b-med">atenção</span></div><div class="item-desc">Equipe de motores pode ter percepção negativa da AC como fornecedor.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-melhorar" data-aid="e-w2a1"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Preparar narrativa positiva sobre o episódio para uso na fábrica de motores</div>Script objetivo com foco nos resultados de ferramentas — pronto em 15 dias.</div></div></div>
+<div class="action act-melhorar" data-aid="e-w2a2"><div class="action-top"><div class="act-pill">Melhorar</div><div class="act-body"><div class="act-what">Reforçar resultados de qualidade do motor como contraargumento</div>One-pager com Cpk e NOK zerado para apresentar em todas as reuniões.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-o " id="panel-engine-o"><div class="panel-label">Oportunidades — Opportunities</div><div class="grp"><div class="grp-title">Novos Motores</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Novos motores Scania (HVO, H2, elétrico) — fase de especificação <span class="badge b-key">prioritário</span></div><div class="item-desc">Novos propulsores criam processos inéditos de montagem — oportunidade de especificar AC.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-aproveitar" data-aid="e-o1a1"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Identificar projetos de novos propulsores em fase de engenharia</div>Mapear com a engenharia do motor os novos projetos — próxima visita.</div></div></div>
+<div class="action act-aproveitar" data-aid="e-o1a2"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Apresentar proposta para montagem dos novos propulsores Scania</div>Proposta completa SW+HW+Service para novos motores — em 60 dias.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Smart Assembly</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Smart Integrated Assembly para linha de motores <span class="badge b-key">prioritário</span></div><div class="item-desc">Análise de dados de torque em tempo real e alertas automáticos de desvio.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-aproveitar" data-aid="e-o2a1"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Piloto de Smart Assembly nos pontos críticos do cabeçote</div>Demo com dados em tempo real + alertas de NOK — em 90 dias.</div></div></div>
+<div class="action act-aproveitar" data-aid="e-o2a2"><div class="action-top"><div class="act-pill">Aproveitar</div><div class="act-body"><div class="act-what">Propor integração dos dados de motor com o sistema de teste final</div>Roadmap de integração torque + teste de banco — apresentar em 60 dias.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="panel panel-t " id="panel-engine-t"><div class="panel-label">Amea&#231;as — Threats</div><div class="grp"><div class="grp-title">Competição</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Concorrentes com preço menor em fixações auxiliares do motor <span class="badge b-high">crítico</span></div><div class="item-desc">Processos de acessórios e sistemas auxiliares do motor sofrem pressão de custo.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-mitigar" data-aid="e-t1a1"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Criar argumento de TCO para processos auxiliares do motor</div>Planilha comparando custo total incluindo qualidade e retrabalho — em 30 dias.</div></div></div>
+<div class="action act-mitigar" data-aid="e-t1a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Fortalecer presença na engenharia do motor para blindar especificações</div>Visita semanal + case técnico mensal — agenda fixa.</div></div></div>
+</div></div>
+</div>
+<div class="grp"><div class="grp-title">Risco Corporativo</div><div class="item-card" onclick="toggle(this)"><div class="item-header"><div class="item-left"><div class="item-title">Diretriz Grupo VW impondo fornecedor alternativo no motor <span class="badge b-high">crítico</span></div><div class="item-desc">Motor é o processo de maior risco de imposição corporativa pela criticidade.</div></div><div class="chevron">&#9660;</div></div><div class="smart-area" onclick="event.stopPropagation()"><div class="smart-title">&#9889; A&#231;&#245;es SMART</div><div class="action act-mitigar" data-aid="e-t2a1"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Documentar Cpk e savings do motor como evidência técnica incontestável</div>Relatório técnico detalhado — entregar à engenharia e diretoria em 30 dias.</div></div></div>
+<div class="action act-mitigar" data-aid="e-t2a2"><div class="action-top"><div class="act-pill">Mitigar</div><div class="act-body"><div class="act-what">Usar cases de motores Scania Europa como argumento de padronização</div>Apresentar que o grupo já usa AC em motores na Europa — próxima reunião.</div></div></div>
+</div></div>
+</div>
+</div>
+<div class="footer"><span class="badge b-high">cr&#237;tico</span> <span class="badge b-med">aten&#231;&#227;o</span> <span class="badge b-key">chave</span></div>
+</div>
+</div>
+
+
+<div class="pg" id="pg-swot">
+<div class="topbar"><button class="btn-back" style="color:#C4B5FD;border-color:#7C3AED50;background:#7C3AED20" onclick="go('home')">&#8592; Voltar</button><span class="tb-title">SWOT SLA Geral</span><button class="btn-exp" onclick="openExport()">&#8595; Exportar</button></div>
 <div class="app">
   <div class="app-header">
     <h2>SWOT + Ações SMART<br>Atlas Copco × Scania Brasil</h2>
@@ -827,11 +656,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
 
 
 <!-- Export Modal -->
+<div class="export-modal-bg" id="export-modal" onclick="if(event.target===this)closeExport()">
+  <div class="export-modal">
+    <h3>Exportar SWOT</h3>
+    <p>Escolha o formato. Tarefas e notas salvas serão incluídas na exportação.</p>
+    <div class="export-options">
+      <div class="export-opt" onclick="exportPDF()">
+        <div class="export-opt-icon">📄</div>
+        <div class="export-opt-body">
+          <div class="export-opt-title">PDF</div>
+          <div class="export-opt-desc">Documento formatado para apresentação ou impressão</div>
+        </div>
+      </div>
+      <div class="export-opt" onclick="exportExcel()">
+        <div class="export-opt-icon">📊</div>
+        <div class="export-opt-body">
+          <div class="export-opt-title">Excel (.xlsx)</div>
+          <div class="export-opt-desc">Planilha com resumo e detalhamento por quadrante</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-modal-close" onclick="closeExport()">Cancelar</button>
+  </div>
 </div>
 </div>
-
-<!-- ══════════════════ EXPORT MODAL ══════════════════ -->
-</div></div>
 
 <div class="export-modal-bg" id="export-modal" onclick="if(event.target===this)closeExport()">
   <div class="export-modal">
@@ -857,41 +705,33 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Ar
   </div>
 </div>
 
-<!-- ══════════════════ SCRIPTS ══════════════════ -->
-
-</body>
-</html
-
 <script>
 
-function navigate(pageId) {
-  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
-  var el = document.getElementById('page-' + pageId);
-  if(el) el.classList.add('active');
+function switchFac(prefix, q) {
+  ['s','w','o','t'].forEach(function(x) {
+    var p = document.getElementById('panel-' + prefix + '-' + x);
+    var t = document.getElementById('tab-'   + prefix + '-' + x);
+    if(p) p.classList.remove('active');
+    if(t) t.classList.remove('active');
+  });
+  var ap = document.getElementById('panel-' + prefix + '-' + q);
+  var at = document.getElementById('tab-'   + prefix + '-' + q);
+  if(ap) ap.classList.add('active');
+  if(at) at.classList.add('active');
   window.scrollTo(0, 0);
-  if(pageId === 'swot-geral') {
-    setTimeout(function(){
-      document.querySelectorAll('.action[data-aid]').forEach(function(el){
-        if(!el.querySelector('.action-extras')) renderExtras(el.dataset.aid);
-      });
-    }, 50);
-  }
 }
 
-
-// ── Page Navigation ──────────────────────────────────────────────────────────
-function navigate(pageId) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + pageId).classList.add('active');
-  window.scrollTo({top:0, behavior:'smooth'});
-  // init extras when entering swot-geral for first time
-  if(pageId === 'swot-geral') {
-    document.querySelectorAll('.action[data-aid]').forEach(el => {
-      if(!el.querySelector('.action-extras')) renderExtras(el.dataset.aid);
-    });
+var PAGES = ['home','chassis','cab','transmission','engine','swot'];
+var swotInited = false;
+function go(id) {
+  PAGES.forEach(function(p){ document.getElementById('pg-'+p).classList.remove('on'); });
+  document.getElementById('pg-'+id).classList.add('on');
+  window.scrollTo(0,0);
+  if(id === 'swot' && !swotInited) {
+    swotInited = true;
+    document.querySelectorAll('.action[data-aid]').forEach(function(el){ renderExtras(el.dataset.aid); });
   }
 }
-
 
 // ── Nav ──────────────────────────────────────────────
 function switchTab(q){
@@ -922,6 +762,7 @@ function timeAgo(ts){
 }
 
 // ── Render ───────────────────────────────────────────
+const STATUS_LABELS = {inprogress:'In Progress', done:'Done', stop:'Stop'};
 const STATUS_CLASS  = {inprogress:'dot-inprogress', done:'dot-done', stop:'dot-stop'};
 
 function renderExtras(aid){
@@ -1095,106 +936,52 @@ function getAllSWOTData(){
 
 // ── PDF Export ───────────────────────────────────────
 function exportPDF(){
-  closeExport();
-  const data=getAllSWOTData();
-  const QCOLOR={Forças:'#1D9E75',Fraquezas:'#D85A30',Oportunidades:'#378ADD',Ameaças:'#BA7517'};
-  const SCOLOR={inprogress:'#378ADD',done:'#1D9E75',stop:'#E24B4A'};
-
-  let rows='';
-  let curQ='';
-  data.forEach(row=>{
-    if(row.quadrant!==curQ){
-      curQ=row.quadrant;
-      const c=QCOLOR[curQ]||'#666';
-      rows+=`<tr><td colspan="3" style="background:${c};color:#fff;font-weight:700;font-size:11px;padding:5px 8px;letter-spacing:.06em;text-transform:uppercase">${curQ}</td></tr>`;
+  var data = getAllSWOTData();
+  var rows = '';
+  var curQ = '';
+  data.forEach(function(row){
+    if(row.quadrant !== curQ){
+      curQ = row.quadrant;
+      rows += '<tr><td colspan="3" style="padding:6px 8px;font-weight:800;font-size:11px;border-top:2px solid #000;border-bottom:1px solid #ccc;text-transform:uppercase;letter-spacing:.06em">' + curQ + '</td></tr>';
     }
-    const PILL_COLOR={Dominar:'#1D9E75',Manter:'#378ADD',Melhorar:'#EF9F27',Aproveitar:'#7C3AED',Mitigar:'#E24B4A'};
-    const pc=PILL_COLOR[row.tipo]||'#666';
-    rows+=`<tr><td style="padding:6px 8px;font-size:11px;color:#1a1d27;width:55%">${row.acao}</td><td style="padding:6px 8px;text-align:center"><span style="background:${pc};color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase">${row.tipo}</span></td><td style="padding:6px 8px;width:32%">`;
-    if(row.tasks.length){
-      row.tasks.forEach(t=>{const sc=SCOLOR[t.status]||'#378ADD';rows+=`<div style="border-left:3px solid ${sc};padding:2px 5px;margin-bottom:3px;font-size:10px;color:#333">${t.text}</div>`;});
-    }
-    if(row.notes.length){
-      row.notes.forEach(n=>{rows+=`<div style="padding:2px 5px;margin-bottom:3px;font-size:10px;color:#666;font-style:italic">💬 ${n.text}</div>`;});
-    }
-    rows+='</td></tr>';
+    var tasks = ''; var notes = '';
+    row.tasks.forEach(function(t){ tasks += '<div style="font-size:10px;margin-bottom:2px">[' + (STATUS_LABELS[t.status]||'') + '] ' + t.text + '</div>'; });
+    row.notes.forEach(function(n){ notes += '<div style="font-size:10px;color:#555;margin-bottom:2px">&#x25CB; ' + n.text + '</div>'; });
+    rows += '<tr><td style="padding:5px 8px;font-size:11px;border-bottom:.5px solid #e0e0e0;width:12%">' + row.tipo + '</td><td style="padding:5px 8px;font-size:11px;border-bottom:.5px solid #e0e0e0;width:52%">' + row.acao + '</td><td style="padding:5px 8px;font-size:11px;border-bottom:.5px solid #e0e0e0;width:36%">' + tasks + notes + '</td></tr>';
   });
-
-  const win=window.open('','_blank');
-  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>SWOT Atlas Copco × Scania</title>
-  <style>
-    body{font-family:Arial,sans-serif;margin:20px;color:#1a1d27;}
-    h1{font-size:16px;margin-bottom:4px;}
-    p{font-size:11px;color:#666;margin-bottom:16px;}
-    table{width:100%;border-collapse:collapse;font-size:11px;}
-    td{border:.5px solid #ddd;vertical-align:top;}
-    th{background:#f0f2f8;padding:6px 8px;font-size:10px;text-align:left;border:.5px solid #ddd;}
-    @media print{@page{margin:10mm;size:A4;}button{display:none!important;}}
-  </style></head><body>
-  <h1>SWOT + Ações SMART — Atlas Copco × Scania Brasil</h1>
-  <p>Key Account · Chassis · Transmissões · Motores · Cabinas · Gerado em ${new Date().toLocaleDateString('pt-BR')}</p>
-  <button onclick="window.print()" style="margin-bottom:12px;padding:8px 16px;background:#1D9E75;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer">🖨 Imprimir / Salvar PDF</button>
-  <table><thead><tr><th style="width:55%">Ação</th><th style="width:13%">Tipo</th><th style="width:32%">Tarefas & Notas</th></tr></thead><tbody>${rows}</tbody></table>
-  </body></html>`);
+  var win = window.open('','_blank');
+  if(!win){alert('Permita pop-ups para exportar o PDF.');return;}
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>SWOT Atlas Copco x Scania</title><style>body{font-family:Arial,sans-serif;margin:20px;color:#000;font-size:12px;}h1{font-size:15px;margin-bottom:4px;}p{font-size:11px;color:#555;margin-bottom:14px;}table{width:100%;border-collapse:collapse;}th{text-align:left;padding:5px 8px;border-bottom:2px solid #000;font-size:10px;text-transform:uppercase;letter-spacing:.05em;}@media print{@page{margin:10mm;size:A4 portrait;}button{display:none!important;}}</style></head><body><h1>SWOT + A&ccedil;&otilde;es SMART &mdash; Atlas Copco &times; Scania Brasil</h1><p>Key Account &middot; Chassis &middot; Transmiss&otilde;es &middot; Motores &middot; Cabinas &middot; Gerado em ' + new Date().toLocaleDateString('pt-BR') + '</p><button onclick="window.print()" style="margin-bottom:14px;padding:8px 18px;background:#000;color:#fff;border:none;border-radius:5px;font-size:13px;font-weight:700;cursor:pointer">&#128438; Imprimir / Salvar PDF</button><table><thead><tr><th style="width:12%">Tipo</th><th style="width:52%">A&ccedil;&atilde;o SMART</th><th style="width:36%">Tarefas &amp; Notas</th></tr></thead><tbody>' + rows + '</tbody></table></body></html>');
   win.document.close();
 }
 
 
 function exportExcel(){
-  if(!window.XLSX){
-    // fallback: export as CSV
-    exportCSV(); return;
-  }
-  closeExport();
-  const XLSX=window.XLSX;
-  const wb=XLSX.utils.book_new();
-  const quadrants=[
-    {id:'s',label:'Forcas'},
-    {id:'w',label:'Fraquezas'},
-    {id:'o',label:'Oportunidades'},
-    {id:'t',label:'Ameacas'}
-  ];
-  // Summary sheet
-  const summary=[['Quadrante','Tipo','Ação','Total Tarefas','In Progress','Done','Stop','Total Notas']];
-  quadrants.forEach(q=>{
-    document.querySelectorAll('#panel-'+q.id+' .action[data-aid]').forEach(el=>{
-      const aid=el.dataset.aid;
-      const what=el.querySelector('.act-what')?el.querySelector('.act-what').textContent.trim():'';
-      const pill=el.querySelector('.act-pill')?el.querySelector('.act-pill').textContent.trim():'';
-      const data=load(aid);
-      const ip=data.tasks.filter(t=>t.status==='inprogress').length;
-      const dn=data.tasks.filter(t=>t.status==='done').length;
-      const st=data.tasks.filter(t=>t.status==='stop').length;
-      summary.push([q.label.replace('Forcas','Forças'),pill,what,data.tasks.length,ip,dn,st,data.notes.length]);
-    });
+  if(!window.XLSX){exportCSV();return;}
+  var XLSX = window.XLSX;
+  var wb = XLSX.utils.book_new();
+  var data = getAllSWOTData();
+  var sum = [['Quadrante','Tipo','Ação SMART','Tarefas (total)','In Progress','Done','Stop','Notas']];
+  data.forEach(function(r){
+    var ip=r.tasks.filter(function(t){return t.status==='inprogress';}).length;
+    var dn=r.tasks.filter(function(t){return t.status==='done';}).length;
+    var st=r.tasks.filter(function(t){return t.status==='stop';}).length;
+    sum.push([r.quadrant, r.tipo, r.acao, r.tasks.length, ip, dn, st, r.notes.length]);
   });
-  const ws_sum=XLSX.utils.aoa_to_sheet(summary);
-  ws_sum['!cols']=[{wch:15},{wch:12},{wch:60},{wch:14},{wch:13},{wch:8},{wch:8},{wch:13}];
-  XLSX.utils.book_append_sheet(wb,ws_sum,'Resumo');
-
-  // Detail sheet per quadrant
-  quadrants.forEach(q=>{
-    const rows=[['Ação','Tipo','Tarefa / Nota','Status / Tipo','Data']];
-    document.querySelectorAll('#panel-'+q.id+' .action[data-aid]').forEach(el=>{
-      const aid=el.dataset.aid;
-      const what=el.querySelector('.act-what')?el.querySelector('.act-what').textContent.trim():'';
-      const pill=el.querySelector('.act-pill')?el.querySelector('.act-pill').textContent.trim():'';
-      const data=load(aid);
-      if(!data.tasks.length && !data.notes.length){
-        rows.push([what,pill,'','','']);
-      } else {
-        data.tasks.forEach(t=>rows.push([what,pill,t.text,STATUS_LABELS[t.status]||'In Progress',new Date(t.at).toLocaleDateString('pt-BR')]));
-        data.notes.forEach(n=>rows.push([what,pill,n.text,'Nota',new Date(n.at).toLocaleDateString('pt-BR')]));
-      }
-    });
-    const ws=XLSX.utils.aoa_to_sheet(rows);
-    ws['!cols']=[{wch:55},{wch:12},{wch:55},{wch:14},{wch:12}];
-    XLSX.utils.book_append_sheet(wb,ws,q.label.slice(0,31));
+  var ws = XLSX.utils.aoa_to_sheet(sum);
+  ws['!cols'] = [{wch:14},{wch:12},{wch:60},{wch:14},{wch:13},{wch:8},{wch:8},{wch:10}];
+  XLSX.utils.book_append_sheet(wb, ws, 'Resumo');
+  var detail = [['Quadrante','Tipo','Ação SMART','Tarefa / Nota','Status','Data']];
+  data.forEach(function(r){
+    if(!r.tasks.length && !r.notes.length){ detail.push([r.quadrant,r.tipo,r.acao,'','','']); }
+    r.tasks.forEach(function(t){ detail.push([r.quadrant,r.tipo,r.acao,t.text,STATUS_LABELS[t.status]||'In Progress',new Date(t.at).toLocaleDateString('pt-BR')]); });
+    r.notes.forEach(function(n){ detail.push([r.quadrant,r.tipo,r.acao,n.text,'Nota',new Date(n.at).toLocaleDateString('pt-BR')]); });
   });
-
+  var ws2 = XLSX.utils.aoa_to_sheet(detail);
+  ws2['!cols'] = [{wch:14},{wch:12},{wch:55},{wch:55},{wch:14},{wch:12}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'Detalhamento');
   XLSX.writeFile(wb,'SWOT_AtlasCopco_Scania.xlsx');
 }
-
 
 
 function exportCSV(){
@@ -1212,9 +999,6 @@ function exportCSV(){
 }
 
 // ── Init ─────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.action[data-aid]').forEach(el=>renderExtras(el.dataset.aid));});
-
-
 </script>
 </body>
 </html>

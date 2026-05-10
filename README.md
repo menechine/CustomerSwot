@@ -1,30 +1,26 @@
-# SWOT + Ações SMART — Atlas Copco × Scania Brasil
+# Atlas Copco × Scania Brasil — Key Account SWOT
 
-Matriz SWOT interativa com ações SMART para o key account Atlas Copco na Scania Brasil.
+Aplicação web de gestão estratégica SWOT para o Key Account Atlas Copco na Scania Brasil.
 
-## 📋 Conteúdo
+## Fábricas
+- **Chassis** — SWOT específica da Fábrica de Chassis
+- **Cab** — SWOT específica da Fábrica de Cabinas
+- **Transmission** — SWOT específica da Fábrica de Transmissões
+- **Engine** — SWOT específica da Fábrica de Motores
+- **SWOT SLA Geral** — Análise estratégica completa (todas as fábricas)
 
-- **Forças** — Posição de mercado, portfólio integrado, engenharia dedicada e relacionamento
-- **Fraquezas** — Riscos do Grupo VW, acesso à alta gestão, execução em projetos especiais
-- **Oportunidades** — Crescimento de share, Smart Integrated Assembly, leverage global
-- **Ameaças** — Acordos corporativos VW, concorrência de preço, troca de stakeholders
+## Funcionalidades
+- Ações SMART por item SWOT
+- Tarefas com status: In Progress / Done / Stop
+- Notas e comentários por ação
+- Dados salvos no navegador (localStorage)
+- Exportação em PDF e Excel
 
-Cada item traz **2 ações SMART** classificadas como: Dominar · Manter · Melhorar · Aproveitar · Mitigar.
+## GitHub Pages
+Acesse em: `https://SEU-USUARIO.github.io/NOME-DO-REPOSITORIO`
 
-## 🚀 Como acessar
-
-O site está publicado via GitHub Pages:  
-👉 `https://SEU-USUARIO.github.io/swot-scania`
-
-## 📁 Arquivos
-
-| Arquivo | Descrição |
-|---|---|
-| `index.html` | Aplicação principal (página única, sem dependências externas) |
-| `README.md` | Este arquivo |
-| `.nojekyll` | Instrui o GitHub Pages a não processar o site com Jekyll |
-
-## 🔒 Uso interno
-
-Este repositório contém informações estratégicas de uso interno.  
-Recomenda-se manter o repositório como **privado** no GitHub.
+## Como publicar
+1. Crie um repositório no GitHub
+2. Faça upload dos 3 arquivos desta pasta
+3. Vá em **Settings → Pages → Source → main**
+4. Aguarde alguns minutos e acesse o link gerado
